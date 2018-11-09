@@ -1,0 +1,11 @@
+{
+  "entry": "app/assets/index.js",
+  "env": {
+    "development": {}
+  },
+  "outputPath": "app/public/dist",
+  "hash": true,
+  "manifest": {
+    "fileName": "../../../config/manifest.json"
+  }
+}
