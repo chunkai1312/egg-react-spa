@@ -30,6 +30,7 @@ module.exports = appInfo => {
       command: 'roadhog dev',
       port: 8000,
       env: {
+        APP_ROOT: process.cwd() + '/app/web',
         BROWSER: 'none',
         ESLINT: 'none',
         SOCKET_SERVER: 'http://127.0.0.1:8000',

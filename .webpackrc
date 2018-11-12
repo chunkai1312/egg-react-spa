@@ -1,5 +1,5 @@
 {
-  "entry": "app/assets/index.js",
+  "entry": "app/web/index.js",
   "env": {
     "development": {}
   },
