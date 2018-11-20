@@ -11,11 +11,13 @@ class MailerService extends Service {
   async sendMail (mailerOptions) {
     const config = this.config
     const transporter = mailer.createTransport(smtpTransport(config.mailer))
-    await transporter.sendMail(mailerOptions)
+
+    /* istanbul ignore next */
+    if (!config.debug) return transporter.sendMail(mailerOptions)
   }
 
-  async sendResetLinkEmail (user) {
-    const { config } = this
+  async sendPasswordResetMail (user) {
+    const config = this.config
 
     const token = await randomBytesAsync(16).then(buffer => buffer.toString('hex'))
     await this.ctx.model.PasswordReset.create({ email: user.email, token })
@@ -32,7 +34,7 @@ class MailerService extends Service {
       `
     }
 
-    await this.sendMail(mailerOptions)
+    return this.sendMail(mailerOptions)
   }
 }
 

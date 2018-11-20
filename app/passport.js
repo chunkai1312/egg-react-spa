@@ -5,19 +5,18 @@
  */
 module.exports = app => {
   app.passport.verify(async (ctx, user) => {
-    const [ authUser ] = await ctx.model.User.findOrCreate({
-      where: { email: user.email },
-      defaults: { email: user.email, name: user.displayName }
-    })
+    const { provider } = user
 
-    const [ oauth ] = await ctx.model.OauthProvider.findOrBuild({
-      where: { user_id: authUser.id, provider: user.provider, provider_user_id: user.id },
-      defaults: { user_id: authUser.id, provider: user.provider, provider_user_id: user.id }
-    })
+    if (provider === 'jwt') {
+      if (ctx.user) return ctx.user
 
-    oauth.access_token = user.accessToken || user.token
-    oauth.refresh_token = user.refreshToken
-    await oauth.save()
+      const authUser = await ctx.service.user.findByEmail(user.payload.sub)
+      return authUser
+    }
+
+    if (provider === 'google' || provider === 'facebook') {
+      await ctx.service.user.createFromOauthProvider(user)
+    }
 
     return user
   })

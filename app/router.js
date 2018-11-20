@@ -6,18 +6,20 @@
 module.exports = app => {
   const { router, controller } = app
 
-  router.get('/api/users/me', app.jwt, controller.api.user.me)
-  router.post('/api/login', controller.auth.login.login)
-  router.post('/api/logout', controller.auth.login.logout)
-  router.post('/api/password/email', controller.auth.forgotPassword.sendResetLinkEmail)
-  router.post('/api/password/reset', controller.auth.resetPassword.reset)
+  const jwt = app.passport.authenticate('jwt', { session: false, successReturnToOrRedirect: null })
 
-  router.patch('/api/settings/profile', app.jwt, controller.settings.profile.update)
-  router.patch('/api/settings/password', app.jwt, controller.settings.password.update)
+  router.post('/api/login', controller.api.auth.login)
+  router.post('/api/logout', controller.api.auth.logout)
+  router.post('/api/password/email', controller.api.auth.forgotPassword)
+  router.post('/api/password/reset', controller.api.auth.resetPassword)
+
+  router.get('/api/users/me', jwt, controller.api.user.me)
+  router.patch('/api/settings/profile', jwt, controller.api.settings.updateProfile)
+  router.patch('/api/settings/password', jwt, controller.api.settings.updatePassword)
 
   router.get('/api/oauth/google',
     app.passport.authenticate('google', {
-      scope: ['profile', 'email', 'https://www.googleapis.com/auth/adwords'],
+      scope: ['profile', 'email'],
       accessType: 'offline',
       prompt: 'consent',
       session: false
@@ -29,14 +31,14 @@ module.exports = app => {
       session: false,
       successReturnToOrRedirect: null
     }),
-    controller.auth.oauth.provider
+    controller.api.auth.oauth
   )
 
   router.get('/api/oauth/facebook',
     app.passport.authenticate('facebook', {
       authType: 'reauthenticate',
       authNonce: '{random-nonce}',
-      scope: ['public_profile', 'email', 'ads_management', 'ads_read'],
+      scope: ['public_profile', 'email'],
       session: false
     })
   )
@@ -46,7 +48,7 @@ module.exports = app => {
       session: false,
       successReturnToOrRedirect: null
     }),
-    controller.auth.oauth.provider
+    controller.api.auth.oauth
   )
 
   router.get('*', controller.home.index)
