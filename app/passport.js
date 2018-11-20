@@ -10,7 +10,7 @@ module.exports = app => {
     if (provider === 'jwt') {
       if (ctx.user) return ctx.user
 
-      const authUser = await ctx.service.user.findByEmail(user.payload.sub)
+      const authUser = await ctx.service.user.find(user.payload.sub)
       return authUser
     }
 
