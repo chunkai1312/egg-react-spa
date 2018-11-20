@@ -1,5 +1,7 @@
 # Egg-React SPA
 
+[![CircleCI](https://circleci.com/gh/chunkai1312/egg-react-spa/tree/master.svg?style=svg)](https://circleci.com/gh/chunkai1312/egg-react-spa/tree/master)
+
 > Starter Boilerplate SPA made with Egg and React
 
 ## Features
