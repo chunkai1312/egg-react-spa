@@ -1,4 +1,4 @@
-'use strict'
+'use strict' /* istanbul ignore next */
 
 /**
  * @param {Egg.Application} app - egg application

@@ -64,7 +64,6 @@ class AuthController extends Controller {
 
     const email = ctx.request.body.email
     const user = await ctx.service.user.findByEmail(email)
-    if (!user) ctx.throw(404, 'user not found')
 
     await ctx.service.mailer.sendPasswordResetMail(user)
     ctx.body = { email, sucess: true }
@@ -85,7 +84,7 @@ class AuthController extends Controller {
 
     const { email, token, password } = ctx.request.body
     const pass = await ctx.model.PasswordReset.findOne({ where: { email, token } })
-    if (!pass) ctx.throw(400, 'invalid token')
+    if (!pass) ctx.throw(403, 'invalid token')
 
     const now = Date.now()
     const oneDay = 1000 * 60 * 60 * 24
@@ -98,6 +97,7 @@ class AuthController extends Controller {
     ctx.body = { email: user.email, success: true }
   }
 
+  /* istanbul ignore next */
   /**
    * GET /api/oauth/:provider/callback
    */

@@ -14,4 +14,6 @@ module.exports = app => {
     email: factory.sequence('User.email', (n) => `user${n}@example.com`),
     name: factory.sequence('User.name', n => `user_${n}`)
   })
+
+  factory.define('password_reset', app.model.PasswordReset, {})
 }

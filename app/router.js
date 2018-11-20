@@ -10,6 +10,7 @@ module.exports = app => {
 
   router.post('/api/login', controller.api.auth.login)
   router.post('/api/logout', controller.api.auth.logout)
+  router.post('/api/signup', controller.api.auth.signup)
   router.post('/api/password/email', controller.api.auth.forgotPassword)
   router.post('/api/password/reset', controller.api.auth.resetPassword)
 

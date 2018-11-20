@@ -1,4 +1,4 @@
-'use strict'
+'use strict' /* istanbul ignore next */
 
 module.exports = () => {
   return async function errorHandler (ctx, next) {
