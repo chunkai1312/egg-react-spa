@@ -3,6 +3,8 @@
 module.exports = appInfo => {
   const config = exports = {}
 
+  config.debug = true
+
   config.host = 'http://localhost:7001'
 
   // use for cookie sign key, should change to your own and keep security
@@ -57,6 +59,10 @@ module.exports = appInfo => {
       user: 'your-mailgun-username',
       pass: 'your-mailgun-password'
     }
+  }
+
+  config.passportJwt = {
+    secret: config.jwt.secret
   }
 
   config.passportGoogle = {
