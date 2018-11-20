@@ -9,4 +9,9 @@ module.exports = app => {
   //   name: factory.sequence('User.name', n => `name_${n}`),
   //   age: 18
   // })
+
+  factory.define('user', app.model.User, {
+    email: factory.sequence('User.email', (n) => `user${n}@example.com`),
+    name: factory.sequence('User.name', n => `user_${n}`)
+  })
 }

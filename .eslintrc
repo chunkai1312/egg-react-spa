@@ -3,5 +3,9 @@
   "env": {
     "node": true,
     "mocha": true
+  },
+  "rules": {
+    "padded-blocks": 0,
+    "no-return-await": 0
   }
 }

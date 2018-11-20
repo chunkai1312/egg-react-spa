@@ -1,11 +1,8 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { withRouter } from 'react-router-dom'
-import { compose } from 'recompose'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { FaFacebookF as FacebookIcon } from 'react-icons/fa'
-import Cookies from 'js-cookie'
 
 const styles = theme => ({
   button: {
