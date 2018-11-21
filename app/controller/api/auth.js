@@ -46,10 +46,11 @@ class AuthController extends Controller {
     })
 
     const { name, email, password } = ctx.request.body
-    const user = await ctx.model.User.create({ name, email, password })
+    const user = await ctx.service.user.create({ name, email, password })
     await ctx.login(user)
 
-    ctx.body = user
+    const token = this.app.jwt.sign({ sub: user.id }, this.config.jwt.secret)
+    ctx.body = { token }
   }
 
   /**
@@ -64,8 +65,8 @@ class AuthController extends Controller {
 
     const email = ctx.request.body.email
     const user = await ctx.service.user.findByEmail(email)
-
     await ctx.service.mailer.sendPasswordResetMail(user)
+
     ctx.body = { email, sucess: true }
   }
 
@@ -83,18 +84,9 @@ class AuthController extends Controller {
     })
 
     const { email, token, password } = ctx.request.body
-    const pass = await ctx.model.PasswordReset.findOne({ where: { email, token } })
-    if (!pass) ctx.throw(403, 'invalid token')
+    await ctx.service.user.resetPassword({ email, token, password })
 
-    const now = Date.now()
-    const oneDay = 1000 * 60 * 60 * 24
-    if ((now - pass.created_at) > oneDay) ctx.throw(403, 'invalid token')
-
-    const user = await ctx.service.user.findByEmail(pass.email)
-    user.password = password
-    await user.save()
-
-    ctx.body = { email: user.email, success: true }
+    ctx.body = { email, success: true }
   }
 
   /* istanbul ignore next */

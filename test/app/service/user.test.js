@@ -76,6 +76,39 @@ describe('test/app/service/user.test.js', () => {
     })
   })
 
+  describe('resetPasword()', () => {
+    it('should reset password success', async () => {
+      await app.factory.create('user', { email: 'user@example.com', password: '123456' })
+      await app.factory.create('password_reset', { id: 1, email: 'user@example.com', token: '1234567890' })
+      const result = await ctx.service.user.resetPassword({ email: 'user@example.com', token: '1234567890', password: '654321' })
+      assert(result)
+    })
+
+    it('should throw 403 error when token does not exist', async () => {
+      try {
+        await app.factory.create('user', { email: 'user@example.com', password: '123456' })
+        await app.factory.create('password_reset', { id: 1, email: 'user@example.com', token: '1234567890' })
+        await ctx.service.user.resetPassword({ email: 'user@example.com', token: '0000000000', password: '654321' })
+        throw new Error('should not execute')
+      } catch (error) {
+        assert(error.status === 403)
+        assert(error.message === 'invalid token')
+      }
+    })
+
+    it('should throw 403 error when token has expired', async () => {
+      try {
+        await app.factory.create('user', { email: 'user@example.com', password: '123456' })
+        await app.factory.create('password_reset', { id: 1, email: 'user@example.com', token: '1234567890', created_at: '2000-01-01T00:00:00.000Z' })
+        await ctx.service.user.resetPassword({ email: 'user@example.com', token: '1234567890', password: '654321' })
+        throw new Error('should not execute')
+      } catch (error) {
+        assert(error.status === 403)
+        assert(error.message === 'invalid token')
+      }
+    })
+  })
+
   describe('create()', () => {
     it('should create success', async () => {
       const user = { name: 'user', email: 'user@example.com' }

@@ -44,6 +44,28 @@ class UserService extends Service {
   }
 
   /**
+   * Reset password of the user.
+   *
+   * @param {Object} payload
+   * @return {Promise}
+   */
+  async resetPassword (payload) {
+    const { email, token, password } = payload
+    const pass = await this.ctx.model.PasswordReset.findOne({ where: { email, token } })
+    if (!pass) this.ctx.throw(403, 'invalid token')
+
+    const now = Date.now()
+    const oneDay = 1000 * 60 * 60 * 24
+    if ((now - pass.created_at) > oneDay) this.ctx.throw(403, 'invalid token')
+
+    const user = await this.ctx.model.User.findOne({ where: { email } })
+    user.password = password
+    await user.save()
+
+    return user
+  }
+
+  /**
    * Create a new user.
    *
    * @param {Object} user
