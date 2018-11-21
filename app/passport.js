@@ -15,7 +15,8 @@ module.exports = app => {
     }
 
     if (provider === 'google' || provider === 'facebook') {
-      await ctx.service.user.createFromOauthProvider(user)
+      const authUser = await ctx.service.user.createFromOauthProvider(user)
+      return authUser
     }
 
     return user
