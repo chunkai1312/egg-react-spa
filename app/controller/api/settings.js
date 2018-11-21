@@ -3,6 +3,10 @@
 const Controller = require('egg').Controller
 
 class SettingsController extends Controller {
+
+  /**
+   * POST /api/settings/profile
+   */
   async updateProfile () {
     const ctx = this.ctx
 
@@ -15,6 +19,9 @@ class SettingsController extends Controller {
     ctx.body = { result }
   }
 
+  /**
+   * POST /api/settings/password
+   */
   async updatePassword () {
     const ctx = this.ctx
 
@@ -30,6 +37,7 @@ class SettingsController extends Controller {
 
     ctx.body = { success: true }
   }
+
 }
 
 module.exports = SettingsController
