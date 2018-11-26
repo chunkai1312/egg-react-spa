@@ -39,7 +39,7 @@ function AppTitle (props) {
             src={icon}
             onClick={onIconClick}
           />
-          <Typography variant="title" color="inherit" className={classes.title} noWrap>{title}</Typography>
+          <Typography variant="h6" color="inherit" className={classes.title} noWrap>{title}</Typography>
           <div className={classes.grow} />
           <Typography variant="caption" color="inherit" className={classes.version}>{`v${version}`}</Typography>
         </Toolbar>

@@ -6,6 +6,9 @@ const theme = createMuiTheme({
   palette: {
     primary: indigo,
     secondary: pink
+  },
+  typography: {
+    useNextVariants: true
   }
 })
 

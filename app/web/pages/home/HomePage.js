@@ -56,11 +56,11 @@ function HomePage (props) {
             <img className={classes.logo} src={require('../../assets/img/logo.svg')} alt="Logo" />
           </div>
           <div className={classes.text}>
-            <Typography variant="display2" component="h1" color="inherit" gutterBottom>
-              {'React Material Boilerplate'}
+            <Typography variant="h3" component="h1" color="inherit" gutterBottom>
+              {'Egg-React SPA'}
             </Typography>
-            <Typography variant="headline" component="h2" color="inherit" className={classes.headline}>
-              {'A bolierplate for building React/Redux applications with Material-UI'}
+            <Typography variant="h5" component="h2" color="inherit" className={classes.headline}>
+              {'Starter Boilerplate SPA made with Egg and React'}
             </Typography>
           </div>
         </div>

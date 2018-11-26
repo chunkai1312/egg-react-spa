@@ -72,7 +72,7 @@ class SettingsPage extends React.Component {
     const { openProfileUpdateFormDialog, openPasswordChangeFormDialog } = this.state
     return (
       <PageContent>
-        <Typography variant="headline" gutterBottom>
+        <Typography variant="h5" gutterBottom>
           {'Personal Information'}
         </Typography>
         <Paper className={classes.paper}>
