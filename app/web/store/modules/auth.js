@@ -1,11 +1,12 @@
+import { createAction, handleActions } from 'redux-actions'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
 const SET_USER_DATA = 'SET_USER_DATA'
 const SET_AUTHENTICATED = 'SET_AUTHENTICATED'
 
-const setUserData = user => ({ type: SET_USER_DATA, payload: user })
-const setAuthenticated = authenticated => ({ type: SET_AUTHENTICATED, payload: authenticated })
+export const setUserData = createAction(SET_USER_DATA)
+export const setAuthenticated = createAction(SET_AUTHENTICATED)
 
 export const fetchUser = () => {
   return axios.get('/api/users/me', { headers: { 'Authorization': `Bearer ${Cookies.get('token')}` } })
@@ -85,13 +86,7 @@ const initialState = {
   authenticated: false
 }
 
-export default function reducer (state = initialState, action) {
-  switch (action.type) {
-    case SET_USER_DATA:
-      return { ...state, user: action.payload }
-    case SET_AUTHENTICATED:
-      return { ...state, authenticated: action.payload }
-    default:
-      return state
-  }
-}
+export default handleActions({
+  [SET_USER_DATA]: (state, action) => ({ ...state, user: action.payload }),
+  [SET_AUTHENTICATED]: (state, action) => ({ ...state, authenticated: action.payload })
+}, initialState)

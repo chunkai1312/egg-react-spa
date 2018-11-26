@@ -1,16 +1,13 @@
+import { createAction, handleActions } from 'redux-actions'
+
 const SET_LOADING = 'SET_LOADING'
 
-export const setLoading = loading => ({ type: SET_LOADING, payload: loading })
+export const setLoading = createAction(SET_LOADING)
 
 const initialState = {
   loading: true
 }
 
-export default function reducer (state = initialState, action) {
-  switch (action.type) {
-    case SET_LOADING:
-      return { ...state, loading: action.payload }
-    default:
-      return state
-  }
-}
+export default handleActions({
+  [SET_LOADING]: (state, action) => ({ ...state, loading: action.payload })
+}, initialState)
