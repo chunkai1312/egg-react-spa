@@ -2,7 +2,7 @@
 
 const { name, version } = require('./package.json')
 
-export default {
+module.exports = {
   "entry": "app/web/index.js",
   "env": {
     "development": {}
@@ -13,7 +13,8 @@ export default {
     "fileName": "../../../config/manifest.json"
   },
   "define": {
-    "process.env.APP_NAME": process.env.APP_NAME || 'App Name',
-    "process.env.APP_VERSION": process.env.APP_VERSION ||'0.0.0'
-  }
+    "process.env.APP_NAME": process.env.APP_NAME || "App Name",
+    "process.env.APP_VERSION": process.env.APP_VERSION ||"0.0.0"
+  },
+  "es5ImcompatibleVersions": true
 }
