@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
-import { compose, withHandlers } from 'recompose'
 import classNames from 'classnames'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -54,7 +53,7 @@ const validate = values => {
 }
 
 function LoginForm (props, context) {
-  const { classes, onSubmit, onCallback, handleClick } = props
+  const { classes, onSubmit, onCallback } = props
   return (
     <Form
       onSubmit={onSubmit}
@@ -73,7 +72,7 @@ function LoginForm (props, context) {
             </Grid>
             <Grid item>
               <div className={classes.wrapper}>
-                <Button type="submit" disabled={submitting} className={classes.button} variant="contained" size='large' color="primary" onClick={handleClick}>
+                <Button type="submit" disabled={submitting} className={classes.button} variant="contained" size='large' color="primary">
                   {'Login'}
                 </Button>
                 {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
@@ -91,17 +90,7 @@ function LoginForm (props, context) {
 LoginForm.propTypes = {
   classes: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
-  onCallback: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired
+  onCallback: PropTypes.func.isRequired
 }
 
-export default compose(
-  withStyles(styles),
-  withHandlers({
-    handleClick: () => () => {
-      document
-        .getElementById('login-form')
-        .dispatchEvent(new window.Event('submit', { cancelable: true }))
-    }
-  })
-)(LoginForm)
+export default withStyles(styles)(LoginForm)

@@ -1,6 +1,5 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { compose, withHandlers } from 'recompose'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
@@ -50,7 +49,7 @@ const validate = values => {
 }
 
 function PasswordForgotForm (props, context) {
-  const { classes, onSubmit, handleClick } = props
+  const { classes, onSubmit } = props
   return (
     <Form
       onSubmit={onSubmit}
@@ -60,7 +59,7 @@ function PasswordForgotForm (props, context) {
         <form id="password-forgot-form" className={classes.form} onSubmit={handleSubmit}>
           <Field name="email" component={TextField} label={'Email'} margin="normal" fullWidth />
           <div className={classes.wrapper}>
-            <Button type="submit" fullWidth disabled={submitting} className={classes.button} variant="contained" size='large' color="primary" onClick={handleClick}>
+            <Button type="submit" fullWidth disabled={submitting} className={classes.button} variant="contained" size='large' color="primary">
               {'Send Password Reset Link'}
             </Button>
             {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
@@ -73,17 +72,7 @@ function PasswordForgotForm (props, context) {
 
 PasswordForgotForm.propTypes = {
   classes: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired
 }
 
-export default compose(
-  withStyles(styles),
-  withHandlers({
-    handleClick: () => () => {
-      document
-        .getElementById('password-forgot-form')
-        .dispatchEvent(new window.Event('submit', { cancelable: true }))
-    }
-  })
-)(PasswordForgotForm)
+export default withStyles(styles)(PasswordForgotForm)

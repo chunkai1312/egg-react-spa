@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
-import { compose, withHandlers } from 'recompose'
+import { compose } from 'recompose'
 import qs from 'query-string'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
@@ -55,7 +55,7 @@ const validate = values => {
 }
 
 function PasswordResetForm (props, context) {
-  const { classes, match, location, onSubmit, handleClick } = props
+  const { classes, match, location, onSubmit } = props
   return (
     <Form
       onSubmit={onSubmit}
@@ -68,7 +68,7 @@ function PasswordResetForm (props, context) {
           <Field name="password_confirmation" type="password" component={TextField} label={'Confirm Password'} margin="normal" fullWidth />
           <Field name="token" type="hidden" component="input" />
           <div className={classes.wrapper}>
-            <Button type="submit" fullWidth disabled={submitting} className={classes.button} variant="contained" size='large' color="primary" onClick={handleClick}>
+            <Button type="submit" fullWidth disabled={submitting} className={classes.button} variant="contained" size='large' color="primary">
               {'Change Password'}
             </Button>
             {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
@@ -83,18 +83,10 @@ PasswordResetForm.propTypes = {
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  handleClick: PropTypes.func.isRequired
+  onSubmit: PropTypes.func.isRequired
 }
 
 export default compose(
   withRouter,
-  withStyles(styles),
-  withHandlers({
-    handleClick: () => () => {
-      document
-        .getElementById('login-form')
-        .dispatchEvent(new window.Event('submit', { cancelable: true }))
-    }
-  })
+  withStyles(styles)
 )(PasswordResetForm)
