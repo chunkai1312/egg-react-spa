@@ -52,14 +52,19 @@ class PasswordForgotPage extends React.Component {
     success: false
   }
 
-  handleSubmit = (values, form) => {
+  handleSubmit = (values, actions) => {
     const { enqueueSnackbar } = this.props
-    return axios.post('/api/password/email', values)
-      .then(res => {
-        enqueueSnackbar('We have e-mailed your password reset link!', { variant: 'success' })
-        form.reset()
-      })
-      .catch(err => enqueueSnackbar(err.response.data.error, { variant: 'error' }))
+    setTimeout(() => {
+      axios.post('/api/password/email', values)
+        .then(res => {
+          actions.setSubmitting(false)
+          enqueueSnackbar('We have e-mailed your password reset link!', { variant: 'success' })
+        })
+        .catch(err => {
+          actions.setSubmitting(false)
+          enqueueSnackbar(err.response.data.error, { variant: 'error' })
+        })
+    }, 500)
   }
 
   render () {

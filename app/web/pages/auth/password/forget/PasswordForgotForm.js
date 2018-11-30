@@ -1,10 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { Formik, Field, Form } from 'formik'
+import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import CircularProgress from '@material-ui/core/CircularProgress'
-import { Form, Field } from 'react-final-form'
-import { TextField } from 'final-form-material-ui'
 
 const styles = theme => ({
   wrapper: {
@@ -40,31 +40,34 @@ const styles = theme => ({
   }
 })
 
-const validate = values => {
-  const errors = {}
-  if (!values.email) {
-    errors.email = 'Required'
-  }
-  return errors
-}
-
 function PasswordForgotForm (props, context) {
   const { classes, onSubmit } = props
+
   return (
-    <Form
-      onSubmit={onSubmit}
+    <Formik
       initialValues={{ email: '' }}
-      validate={validate}
-      render={({ handleSubmit, reset, submitting, pristine, values }) => (
-        <form id="password-forgot-form" className={classes.form} onSubmit={handleSubmit}>
+      validate={values => {
+        const errors = {}
+        if (!values.email) {
+          errors.email = 'Required.'
+        } else if (
+          !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(values.email)
+        ) {
+          errors.email = 'Please enter a valid email address.'
+        }
+        return errors
+      }}
+      onSubmit={onSubmit}
+      render={({ submitForm, isSubmitting, values, setFieldValue }) => (
+        <Form className={classes.form}>
           <Field name="email" component={TextField} label={'Email'} margin="normal" fullWidth />
           <div className={classes.wrapper}>
-            <Button type="submit" fullWidth disabled={submitting} className={classes.button} variant="contained" size='large' color="primary">
+            <Button type="submit" variant="contained" size='large' color="primary" fullWidth className={classes.button} disabled={isSubmitting}>
               {'Send Password Reset Link'}
             </Button>
-            {submitting && <CircularProgress size={24} className={classes.buttonProgress} />}
+            {isSubmitting && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
-        </form>
+        </Form>
       )}
     />
   )

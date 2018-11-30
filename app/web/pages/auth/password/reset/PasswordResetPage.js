@@ -48,17 +48,23 @@ const styles = theme => ({
 })
 
 class PasswordResetPage extends React.Component {
-  handleSubmit = (values, form) => {
+  handleSubmit = (values, actions) => {
     const { enqueueSnackbar } = this.props
-    return axios.post('/api/password/reset', values)
-      .then(res => {
-        enqueueSnackbar('Your password has been reset!', {
-          variant: 'success',
-          action: <Button color="secondary" size="small" component={Link} to="/login">Return to Login</Button>
+    setTimeout(() => {
+      axios.post('/api/password/reset', values)
+        .then(res => {
+          actions.setSubmitting(false)
+          enqueueSnackbar('We have e-mailed your password reset link!', {
+            variant: 'success',
+            action: <Button color="secondary" size="small" component={Link} to="/login">Return to Login</Button>
+          })
         })
-        form.reset()
-      })
-      .catch(err => enqueueSnackbar(err.response.data.error, { variant: 'error' }))
+        .catch(err => {
+          actions.setSubmitting(false)
+          enqueueSnackbar(err.response.data.error, { variant: 'error' })
+        })
+        .then(() => actions.resetForm())
+    }, 500)
   }
 
   render () {

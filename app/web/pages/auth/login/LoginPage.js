@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
+import axios from 'axios'
 import { withSnackbar } from 'notistack'
 import Avatar from '@material-ui/core/Avatar'
 import LockIcon from '@material-ui/icons/LockOutlined'
@@ -9,7 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
 import LoginForm from './LoginForm'
-import { login, loginWithOauth } from '../../../store/modules/auth'
+import { login } from '../../../store/modules/auth'
 
 const styles = theme => ({
   root: {
@@ -54,16 +55,23 @@ const styles = theme => ({
 })
 
 class LoginPage extends React.Component {
-  handleSubmit = (values) => {
-    const { enqueueSnackbar } = this.props
-    return this.props.login(values)
-      .catch(err => enqueueSnackbar(err.response.data.error, { variant: 'error' }))
+  handleSubmit = (values, actions) => {
+    const { login, enqueueSnackbar } = this.props
+    setTimeout(() => {
+      axios.post('/api/login', values)
+        .then(res => {
+          actions.setSubmitting(false)
+          login(res.data.token)
+        })
+        .catch(err => {
+          actions.setSubmitting(false)
+          enqueueSnackbar(err.response.data.error, { variant: 'error' })
+        })
+    }, 500)
   }
 
-  handleCallback = (data) => {
-    const { enqueueSnackbar } = this.props
-    return this.props.loginWithOauth(data)
-      .catch(err => enqueueSnackbar(err.response.data.error, { variant: 'error' }))
+  handleCallback = (token) => {
+    this.props.login(token)
   }
 
   render () {
@@ -91,7 +99,6 @@ class LoginPage extends React.Component {
 LoginPage.propTypes = {
   classes: PropTypes.object.isRequired,
   login: PropTypes.func.isRequired,
-  loginWithOauth: PropTypes.func.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 }
 
@@ -103,8 +110,7 @@ export default compose(
   connect(
     state => ({ auth: state.auth }),
     dispatch => ({
-      login: credentials => dispatch(login(credentials)),
-      loginWithOauth: token => dispatch(loginWithOauth(token))
+      login: token => dispatch(login(token))
     })
   ),
   withSnackbar,

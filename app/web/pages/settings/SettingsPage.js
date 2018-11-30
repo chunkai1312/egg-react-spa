@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
-import Cookies from 'js-cookie'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
 import { withStyles } from '@material-ui/core/styles'
@@ -46,24 +45,47 @@ class SettingsPage extends React.Component {
     this.setState({ openPasswordChangeFormDialog: true })
   }
 
-  handleProfileUpdateFormDialogClose = (values) => {
+  handleProfileUpdateFormDialogClose = () => {
     this.setState({ openProfileUpdateFormDialog: false })
-    if (!values) return
-
-    const { enqueueSnackbar } = this.props
-    return axios.patch('/api/settings/profile', values, { headers: { 'Authorization': `Bearer ${Cookies.get('token')}` } })
-      .then(res => enqueueSnackbar('Your profile has been updated!', { variant: 'success' }))
-      .catch(err => enqueueSnackbar(err.response.data.error, { variant: 'error' }))
   }
 
-  handlePasswordChangeFormDialogClose = (values) => {
+  handlePasswordChangeFormDialogClose = () => {
     this.setState({ openPasswordChangeFormDialog: false })
-    if (!values) return
+  }
 
+  handleProfileUpdateFormDialogSubmit = (values, actions) => {
     const { enqueueSnackbar } = this.props
-    return axios.patch('/api/settings/password', values, { headers: { 'Authorization': `Bearer ${Cookies.get('token')}` } })
-      .then(res => enqueueSnackbar('Your password has been updated!', { variant: 'success' }))
-      .catch(err => enqueueSnackbar(err.response.data.error, { variant: 'error' }))
+    const { auth } = this.context
+    setTimeout(() => {
+      axios.patch('/api/settings/profile', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
+        .then(res => {
+          actions.setSubmitting(false)
+          auth.setUserData({ ...this.context.auth.user, ...values })
+          enqueueSnackbar('Your profile has been updated!', { variant: 'success' })
+          this.handleProfileUpdateFormDialogClose()
+        })
+        .catch(err => {
+          actions.setSubmitting(false)
+          enqueueSnackbar(err.response.data.error, { variant: 'error' })
+        })
+    }, 500)
+  }
+
+  handlePasswordChangeFormDialogSubmit = (values, actions) => {
+    const { enqueueSnackbar } = this.props
+    const { auth } = this.context
+    setTimeout(() => {
+      axios.patch('/api/settings/password', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
+        .then(res => {
+          actions.setSubmitting(false)
+          enqueueSnackbar('Your password has been updated!', { variant: 'success' })
+          this.handlePasswordChangeFormDialogClose()
+        })
+        .catch(err => {
+          actions.setSubmitting(false)
+          enqueueSnackbar(err.response.data.error, { variant: 'error' })
+        })
+    }, 500)
   }
 
   render () {
@@ -111,8 +133,17 @@ class SettingsPage extends React.Component {
             </ListItem>
           </List>
         </Paper>
-        <ProfileUpdateFormDialog open={openProfileUpdateFormDialog} onClose={this.handleProfileUpdateFormDialogClose} />
-        <PasswordChangeFormDialog open={openPasswordChangeFormDialog} onClose={this.handlePasswordChangeFormDialogClose} />
+        <ProfileUpdateFormDialog
+          user={this.context.auth.user}
+          open={openProfileUpdateFormDialog}
+          onClose={this.handleProfileUpdateFormDialogClose}
+          onSubmit={this.handleProfileUpdateFormDialogSubmit}
+        />
+        <PasswordChangeFormDialog
+          open={openPasswordChangeFormDialog}
+          onClose={this.handlePasswordChangeFormDialogClose}
+          onSubmit={this.handlePasswordChangeFormDialogSubmit}
+        />
       </PageContent>
     )
   }
