@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Link } from 'react-router-dom'
+import compose from 'recompose/compose'
+import { withNamespaces } from 'react-i18next'
 import classNames from 'classnames'
+import { Link } from 'react-router-dom'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -42,7 +44,7 @@ const styles = theme => ({
 })
 
 function LoginForm (props, context) {
-  const { classes, onSubmit, onCallback } = props
+  const { t, classes, onSubmit, onCallback } = props
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
@@ -63,19 +65,19 @@ function LoginForm (props, context) {
       onSubmit={onSubmit}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
         <Form>
-          <Field name="email" label={'Email'} margin="normal" fullWidth component={TextField} />
-          <Field name="password" type="password" label={'Password'} margin="normal" fullWidth component={TextField} />
+          <Field name="email" label={t('email')} margin="normal" fullWidth component={TextField} />
+          <Field name="password" type="password" label={t('password')} margin="normal" fullWidth component={TextField} />
           <div className={classes.marginSmall} />
           <Grid direction='row' justify='space-between' alignItems='center' container>
             <Grid item>
               <Button component={Link} to="/password/forgot" disabled={false} className={classNames(classes.button, classes.noSpace)} size="small">
-                {'Forgot your password?'}
+                {t('forgot_password')}
               </Button>
             </Grid>
             <Grid item>
               <div className={classes.wrapper}>
                 <Button type="submit" disabled={isSubmitting} className={classes.button} variant="contained" size='large' color="primary">
-                  {'Login'}
+                  {t('login')}
                 </Button>
                 {isSubmitting && <CircularProgress size={24} className={classes.buttonProgress} />}
               </div>
@@ -90,9 +92,13 @@ function LoginForm (props, context) {
 }
 
 LoginForm.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired,
   onCallback: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(LoginForm)
+export default compose(
+  withNamespaces(),
+  withStyles(styles)
+)(LoginForm)

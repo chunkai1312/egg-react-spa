@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import { withNamespaces } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -33,6 +34,7 @@ class AuthUserAvatar extends React.Component {
   }
 
   render () {
+    const { t } = this.props
     const { auth: { user, logout } } = this.context
     const { open } = this.state
     return (
@@ -64,13 +66,13 @@ class AuthUserAvatar extends React.Component {
                       <ListItemIcon>
                         <SettingsIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Settings" />
+                      <ListItemText primary={t('settings')} />
                     </MenuItem>
                     <MenuItem onClick={() => logout()}>
                       <ListItemIcon>
                         <ExitToAppIcon />
                       </ListItemIcon>
-                      <ListItemText primary="Logout" />
+                      <ListItemText primary={t('logout')} />
                     </MenuItem>
                   </MenuList>
                 </ClickAwayListener>
@@ -83,8 +85,12 @@ class AuthUserAvatar extends React.Component {
   }
 }
 
+AuthUserAvatar.propTypes = {
+  t: PropTypes.func.isRequired
+}
+
 AuthUserAvatar.contextTypes = {
   auth: PropTypes.object
 }
 
-export default AuthUserAvatar
+export default withNamespaces()(AuthUserAvatar)

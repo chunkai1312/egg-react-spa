@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { compose } from 'recompose'
+import compose from 'recompose/compose'
+import { withNamespaces } from 'react-i18next'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
 import { withStyles } from '@material-ui/core/styles'
@@ -89,24 +90,24 @@ class SettingsPage extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { t, classes } = this.props
     const { auth: { user } } = this.context
     const { openProfileUpdateFormDialog, openPasswordChangeFormDialog } = this.state
     return (
       <PageContent>
         <Typography variant="h5" gutterBottom>
-          {'Personal Information'}
+          {t('your_info')}
         </Typography>
         <Paper className={classes.paper}>
           <List dense>
             <ListItem dense divider>
               <ListItemText
-                primary={'Name'}
+                primary={t('name')}
                 secondary={user && user.name}
               />
               <ListItemSecondaryAction>
-                <Tooltip title={'Edit'}>
-                  <IconButton aria-label="Edit" onClick={this.handleProfileUpdateActionClick}>
+                <Tooltip title={t('edit')}>
+                  <IconButton onClick={this.handleProfileUpdateActionClick}>
                     <EditIcon />
                   </IconButton>
                 </Tooltip>
@@ -114,14 +115,14 @@ class SettingsPage extends React.Component {
             </ListItem>
             <ListItem dense divider>
               <ListItemText
-                primary={'Login Email'}
+                primary={t('email')}
                 secondary={user && user.email}
               />
             </ListItem>
             <ListItem dense>
               <ListItemText
-                primary={'Password'}
-                secondary="*********"
+                primary={t('password')}
+                secondary="**********"
               />
               <ListItemSecondaryAction>
                 <Tooltip title={'Change Password'}>
@@ -150,6 +151,7 @@ class SettingsPage extends React.Component {
 }
 
 SettingsPage.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 }
@@ -159,6 +161,7 @@ SettingsPage.contextTypes = {
 }
 
 export default compose(
+  withNamespaces(),
   withSnackbar,
   withStyles(styles)
 )(SettingsPage)

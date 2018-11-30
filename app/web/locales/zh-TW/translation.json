@@ -29,6 +29,6 @@
   "your_password": "您的密碼",
   "password_updated": "您的密碼已經更新!",
   "new_password": "新密碼",
-  "login_with": "登入",
+  "login_with": "使用 {{oauth}} 登入",
   "register_with": "註冊"
 }

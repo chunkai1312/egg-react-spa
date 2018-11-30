@@ -10,6 +10,7 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import withStyles from '@material-ui/core/styles/withStyles'
 import LoginForm from './LoginForm'
+import LanguageSelector from '../../../components/LanguageSelector'
 import { login } from '../../../store/modules/auth'
 
 const styles = theme => ({
@@ -88,6 +89,7 @@ class LoginPage extends React.Component {
                 Sign in
               </Typography>
               <LoginForm onSubmit={this.handleSubmit} onCallback={this.handleCallback} />
+              <LanguageSelector />
             </Paper>
           </main>
         </div>
@@ -109,9 +111,7 @@ LoginPage.contextTypes = {
 export default compose(
   connect(
     state => ({ auth: state.auth }),
-    dispatch => ({
-      login: token => dispatch(login(token))
-    })
+    dispatch => ({ login: token => dispatch(login(token)) })
   ),
   withSnackbar,
   withStyles(styles)

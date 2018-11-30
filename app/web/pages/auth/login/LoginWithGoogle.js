@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
+import { withI18n } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { FaGoogle as GoogleIcon } from 'react-icons/fa'
@@ -31,19 +33,23 @@ class LoginWithGoogle extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { t, classes } = this.props
     return (
       <Button className={classes.button} fullWidth variant="outlined" color="secondary" onClick={() => window.open('/api/oauth/google')}>
         <GoogleIcon className={classes.leftIcon} />
-        {'Login with Google'}
+        {t('login_with', { oauth: 'Google' })}
       </Button>
     )
   }
 }
 
 LoginWithGoogle.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onCallback: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(LoginWithGoogle)
+export default compose(
+  withI18n(),
+  withStyles(styles)
+)(LoginWithGoogle)

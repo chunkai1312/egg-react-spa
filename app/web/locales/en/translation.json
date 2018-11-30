@@ -29,6 +29,6 @@
   "your_password": "Your Password",
   "password_updated": "Your password has been updated!",
   "new_password": "New Password",
-  "login_with": "Login with",
+  "login_with": "Login with {{oauth}}",
   "register_with": "Register with"
 }
