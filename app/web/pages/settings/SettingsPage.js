@@ -46,24 +46,18 @@ class SettingsPage extends React.Component {
     this.setState({ openPasswordChangeFormDialog: true })
   }
 
-  handleProfileUpdateFormDialogClose = () => {
-    this.setState({ openProfileUpdateFormDialog: false })
-  }
+  handleProfileUpdateFormDialogClose = (values, actions) => {
+    if (!values) return this.setState({ openProfileUpdateFormDialog: false })
 
-  handlePasswordChangeFormDialogClose = () => {
-    this.setState({ openPasswordChangeFormDialog: false })
-  }
-
-  handleProfileUpdateFormDialogSubmit = (values, actions) => {
-    const { enqueueSnackbar } = this.props
+    const { t, enqueueSnackbar } = this.props
     const { auth } = this.context
     setTimeout(() => {
       axios.patch('/api/settings/profile', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
         .then(res => {
           actions.setSubmitting(false)
           auth.setUserData({ ...this.context.auth.user, ...values })
-          enqueueSnackbar('Your profile has been updated!', { variant: 'success' })
-          this.handleProfileUpdateFormDialogClose()
+          enqueueSnackbar(t('info_updated'), { variant: 'success' })
+          this.setState({ openProfileUpdateFormDialog: false })
         })
         .catch(err => {
           actions.setSubmitting(false)
@@ -72,18 +66,20 @@ class SettingsPage extends React.Component {
     }, 500)
   }
 
-  handlePasswordChangeFormDialogSubmit = (values, actions) => {
-    const { enqueueSnackbar } = this.props
+  handlePasswordChangeFormDialogClose = (values, actions) => {
+    if (!values) return this.setState({ openPasswordChangeFormDialog: false })
+
+    const { t, enqueueSnackbar } = this.props
     const { auth } = this.context
     setTimeout(() => {
       axios.patch('/api/settings/password', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
         .then(res => {
-          actions.setSubmitting(false)
-          enqueueSnackbar('Your password has been updated!', { variant: 'success' })
-          this.handlePasswordChangeFormDialogClose()
+          actions.resetForm(false)
+          enqueueSnackbar(t('password_updated'), { variant: 'success' })
+          this.setState({ openPasswordChangeFormDialog: false })
         })
         .catch(err => {
-          actions.setSubmitting(false)
+          actions.resetForm(false)
           enqueueSnackbar(err.response.data.error, { variant: 'error' })
         })
     }, 500)
@@ -106,7 +102,7 @@ class SettingsPage extends React.Component {
                 secondary={user && user.name}
               />
               <ListItemSecondaryAction>
-                <Tooltip title={t('edit')}>
+                <Tooltip title={t('update')}>
                   <IconButton onClick={this.handleProfileUpdateActionClick}>
                     <EditIcon />
                   </IconButton>
@@ -125,8 +121,8 @@ class SettingsPage extends React.Component {
                 secondary="**********"
               />
               <ListItemSecondaryAction>
-                <Tooltip title={'Change Password'}>
-                  <IconButton aria-label="Change Password" onClick={this.handlePasswordChangeActionClick}>
+                <Tooltip title={t('reset_password')}>
+                  <IconButton onClick={this.handlePasswordChangeActionClick}>
                     <LockIcon />
                   </IconButton>
                 </Tooltip>
@@ -138,12 +134,10 @@ class SettingsPage extends React.Component {
           user={this.context.auth.user}
           open={openProfileUpdateFormDialog}
           onClose={this.handleProfileUpdateFormDialogClose}
-          onSubmit={this.handleProfileUpdateFormDialogSubmit}
         />
         <PasswordChangeFormDialog
           open={openPasswordChangeFormDialog}
           onClose={this.handlePasswordChangeFormDialogClose}
-          onSubmit={this.handlePasswordChangeFormDialogSubmit}
         />
       </PageContent>
     )

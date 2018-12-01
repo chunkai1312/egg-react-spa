@@ -1,19 +1,20 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
+import { withNamespaces } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
 import Dialog from '@material-ui/core/Dialog'
 import DialogActions from '@material-ui/core/DialogActions'
 import DialogContent from '@material-ui/core/DialogContent'
-import DialogContentText from '@material-ui/core/DialogContentText'
 import DialogTitle from '@material-ui/core/DialogTitle'
 import Button from '@material-ui/core/Button'
 
 const styles = theme => ({})
 
 function ProfileUpdateFormDialog (props, context) {
-  const { open, onClose, onSubmit, user, title, message, ok, cancel } = props
+  const { t, open, onClose, user } = props
   return (
     <Formik
       initialValues={user || { name: '' }}
@@ -24,18 +25,17 @@ function ProfileUpdateFormDialog (props, context) {
         }
         return errors
       }}
-      onSubmit={onSubmit}
+      onSubmit={onClose}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
         <Form>
-          <Dialog fullWidth open={open} onClose={onClose}>
-            <DialogTitle>{title}</DialogTitle>
+          <Dialog fullWidth open={open} onClose={() => onClose(null)} onKeyDown={(e) => (e.which === 13) && submitForm()}>
+            <DialogTitle>{t('your_info')}</DialogTitle>
             <DialogContent>
-              <DialogContentText>{message}</DialogContentText>
-              <Field type="text" name="name" label={'Name'} margin="normal" required fullWidth component={TextField} />
+              <Field type="text" name="name" label={t('name')} margin="normal" required fullWidth component={TextField} />
             </DialogContent>
             <DialogActions>
-              <Button color="primary" onClick={onClose}>{cancel}</Button>
-              <Button color="primary" disabled={isSubmitting} onClick={submitForm}>{ok}</Button>
+              <Button color="primary" onClick={() => onClose(null)}>{t('cancel')}</Button>
+              <Button color="primary" disabled={isSubmitting} onClick={submitForm}>{t('ok')}</Button>
             </DialogActions>
           </Dialog>
         </Form>
@@ -45,26 +45,17 @@ function ProfileUpdateFormDialog (props, context) {
 }
 
 ProfileUpdateFormDialog.propTypes = {
-  user: PropTypes.object,
+  t: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  title: PropTypes.string,
-  message: PropTypes.node,
-  ok: PropTypes.string,
-  cancel: PropTypes.string
+  user: PropTypes.object
 }
 
 ProfileUpdateFormDialog.defaultProps = {
-  open: false,
-  title: 'Update Profile',
-  message: '',
-  ok: 'Save',
-  cancel: 'Cancel'
+  open: false
 }
 
-ProfileUpdateFormDialog.contextTypes = {
-  t: PropTypes.func
-}
-
-export default withStyles(styles)(ProfileUpdateFormDialog)
+export default compose(
+  withNamespaces(),
+  withStyles(styles)
+)(ProfileUpdateFormDialog)
