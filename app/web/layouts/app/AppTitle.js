@@ -32,13 +32,13 @@ function AppTitle (props) {
     <div className={classes.toolbar}>
       <AppBar position="static">
         <Toolbar className={classes.toolbar}>
-          <Avatar
+          {icon && <Avatar
             component={Link}
             to={'/'}
             className={classes.avatar}
             src={icon}
             onClick={onIconClick}
-          />
+          />}
           <Typography variant="h6" color="inherit" className={classes.title} noWrap>{title}</Typography>
           <div className={classes.grow} />
           <Typography variant="caption" color="inherit" className={classes.version}>{`v${version}`}</Typography>
@@ -57,10 +57,10 @@ AppTitle.propTypes = {
 }
 
 AppTitle.defaultProps = {
-  icon: '/favicon.ico',
-  title: process.env.APP_NAME || 'App Name',
+  icon: null,
+  title: process.env.APP_NAME || 'Egg-React',
   version: process.env.APP_VERSION || `0.0.0`,
-  onIconClick: /* istanbul ignore next */ () => {}
+  onIconClick: () => {}
 }
 
 export default withStyles(styles)(AppTitle)

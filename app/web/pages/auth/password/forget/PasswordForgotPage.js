@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { compose } from 'recompose'
+import { withNamespaces } from 'react-i18next'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -68,7 +69,7 @@ class PasswordForgotPage extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { t, classes } = this.props
     return (
       <div className={classes.root}>
         <div className={classes.container}>
@@ -77,9 +78,7 @@ class PasswordForgotPage extends React.Component {
               <Avatar className={classes.avatar}>
                 <LockIcon />
               </Avatar>
-              <Typography component="h1" variant="h5">
-                Reset Password
-              </Typography>
+              <Typography component="h1" variant="h5">{t('reset_password')}</Typography>
               <PasswordForgotForm onSubmit={this.handleSubmit} />
               <Button fullWidth component={Link} to="/login">Return to Login</Button>
             </Paper>
@@ -91,11 +90,13 @@ class PasswordForgotPage extends React.Component {
 }
 
 PasswordForgotPage.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 }
 
 export default compose(
+  withNamespaces(),
   withSnackbar,
   withStyles(styles)
 )(PasswordForgotPage)

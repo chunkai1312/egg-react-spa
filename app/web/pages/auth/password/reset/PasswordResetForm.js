@@ -1,6 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { withRouter } from 'react-router-dom'
+import { withNamespaces } from 'react-i18next'
 import { compose } from 'recompose'
 import qs from 'query-string'
 import { Formik, Field, Form } from 'formik'
@@ -44,7 +45,7 @@ const styles = theme => ({
 })
 
 function PasswordResetForm (props, context) {
-  const { classes, match, location, onSubmit } = props
+  const { t, classes, match, location, onSubmit } = props
   const email = qs.parse(location.search).email
   return (
     <Formik
@@ -67,13 +68,13 @@ function PasswordResetForm (props, context) {
       onSubmit={onSubmit}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
         <Form className={classes.form}>
-          <Field name="email" type="email" component={TextField} label={'Email'} margin="normal" fullWidth disabled />
-          <Field name="password" type="password" component={TextField} label={'Password'} margin="normal" fullWidth />
-          <Field name="password_confirmation" type="password" component={TextField} label={'Confirm Password'} margin="normal" fullWidth />
+          <Field name="email" type="email" component={TextField} label={t('email')} margin="normal" fullWidth disabled />
+          <Field name="password" type="password" component={TextField} label={t('password')} margin="normal" fullWidth />
+          <Field name="password_confirmation" type="password" component={TextField} label={t('confirm_password')} margin="normal" fullWidth />
           <Field name="token" type="hidden" component="input" />
           <div className={classes.wrapper}>
             <Button type="submit" variant="contained" size='large' color="primary" fullWidth className={classes.button} disabled={isSubmitting}>
-              {'Change Password'}
+              {t('reset_password')}
             </Button>
             {isSubmitting && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
@@ -84,6 +85,7 @@ function PasswordResetForm (props, context) {
 }
 
 PasswordResetForm.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
@@ -92,5 +94,6 @@ PasswordResetForm.propTypes = {
 
 export default compose(
   withRouter,
+  withNamespaces(),
   withStyles(styles)
 )(PasswordResetForm)

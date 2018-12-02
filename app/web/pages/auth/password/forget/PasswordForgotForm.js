@@ -1,5 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
+import { withNamespaces } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -41,7 +43,7 @@ const styles = theme => ({
 })
 
 function PasswordForgotForm (props, context) {
-  const { classes, onSubmit } = props
+  const { t, classes, onSubmit } = props
 
   return (
     <Formik
@@ -60,10 +62,10 @@ function PasswordForgotForm (props, context) {
       onSubmit={onSubmit}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
         <Form className={classes.form}>
-          <Field name="email" component={TextField} label={'Email'} margin="normal" fullWidth />
+          <Field name="email" component={TextField} label={t('email')} margin="normal" fullWidth />
           <div className={classes.wrapper}>
             <Button type="submit" variant="contained" size='large' color="primary" fullWidth className={classes.button} disabled={isSubmitting}>
-              {'Send Password Reset Link'}
+              {t('send_password_reset_link')}
             </Button>
             {isSubmitting && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
@@ -74,8 +76,12 @@ function PasswordForgotForm (props, context) {
 }
 
 PasswordForgotForm.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired
 }
 
-export default withStyles(styles)(PasswordForgotForm)
+export default compose(
+  withNamespaces(),
+  withStyles(styles)
+)(PasswordForgotForm)
