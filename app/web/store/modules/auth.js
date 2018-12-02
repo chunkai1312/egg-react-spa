@@ -2,15 +2,15 @@ import { createAction, handleActions } from 'redux-actions'
 import axios from 'axios'
 import Cookies from 'js-cookie'
 
-const SAVE_TOKEN = 'SAVE_TOKEN'
-const SET_USER_DATA = 'SET_USER_DATA'
-const CLEAR_AUTH = 'CLEAR_AUTH'
+const SAVE_TOKEN = 'auth/SAVE_TOKEN'
+const SET_USER_DATA = 'auth/SET_USER_DATA'
+const CLEAR_AUTH = 'auth/CLEAR_AUTH'
 
 export const saveToken = createAction(SAVE_TOKEN)
 export const clearAuth = createAction(CLEAR_AUTH)
 export const setUserData = createAction(SET_USER_DATA)
 
-export const login = token => dispatch => {
+export const login = (token, cb) => dispatch => {
   return axios.get('/api/users/me', { headers: { 'Authorization': `Bearer ${token}` } })
     .then(res => {
       Cookies.set('token', token)
@@ -18,6 +18,7 @@ export const login = token => dispatch => {
       dispatch(setUserData(res.data))
     })
     .catch(() => dispatch(clearAuth()))
+    .then(cb)
 }
 
 export const logout = cb => dispatch => {
