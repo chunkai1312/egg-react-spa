@@ -41,8 +41,8 @@ function AppUser (props, context) {
         ? <Avatar className={classes.avatar} alt="Avatar" src={user.photo_url} />
         : <Avatar className={classes.avatar}>{user && user.name.substr(0, 1)}</Avatar>}
       <div className={classes.info}>
-        <Typography variant="body2">{user && user.name}</Typography>
-        <Typography variant="body1">{user && user.email}</Typography>
+        <Typography variant="body1">{user && user.name}</Typography>
+        <Typography variant="body2">{user && user.email}</Typography>
       </div>
     </div>
   )

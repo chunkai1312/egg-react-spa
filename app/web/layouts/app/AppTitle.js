@@ -14,7 +14,9 @@ const styles = theme => ({
       cursor: 'pointer'
     }
   },
-  title: {},
+  title: {
+    textDecoration: 'none'
+  },
   version: {
     marginTop: 5
   },
@@ -27,39 +29,28 @@ const styles = theme => ({
 })
 
 function AppTitle (props) {
-  const { classes, title, version, icon, onIconClick } = props
+  const { className, classes, title, icon, onIconClick } = props
   return (
-    <div className={classes.toolbar}>
-      <AppBar position="static">
-        <Toolbar className={classes.toolbar}>
-          {icon && <Avatar
-            component={Link}
-            to={'/'}
-            className={classes.avatar}
-            src={icon}
-            onClick={onIconClick}
-          />}
-          <Typography variant="h6" color="inherit" className={classes.title} noWrap>{title}</Typography>
-          <div className={classes.grow} />
-          <Typography variant="caption" color="inherit" className={classes.version}>{`v${version}`}</Typography>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <AppBar className={className} position="static">
+      <Toolbar className={classes.toolbar}>
+        {icon && <Avatar component={Link} to="/" className={classes.avatar} src={icon} onClick={onIconClick} />}
+        <Typography component={Link} to="/" variant="h6" color="inherit" className={classes.title} noWrap>{title}</Typography>
+      </Toolbar>
+    </AppBar>
   )
 }
 
 AppTitle.propTypes = {
+  className: PropTypes.string,
   classes: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
-  version: PropTypes.string,
   icon: PropTypes.string,
   onIconClick: PropTypes.func
 }
 
 AppTitle.defaultProps = {
   icon: null,
-  title: process.env.APP_NAME || 'Egg-React',
-  version: process.env.APP_VERSION || `0.0.0`,
+  title: process.env.APP_TITLE,
   onIconClick: () => {}
 }
 

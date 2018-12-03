@@ -20,9 +20,6 @@ import ProfileUpdateFormDialog from './ProfileUpdateFormDialog'
 import PasswordChangeFormDialog from './PasswordChangeFormDialog'
 
 const styles = theme => ({
-  root: {
-    marginBottom: 60
-  },
   paper: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 4

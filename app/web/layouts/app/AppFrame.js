@@ -47,8 +47,8 @@ const styles = theme => ({
     }
   },
   authUserAvatar: {
-    width: 30,
-    height: 30
+    width: 24,
+    height: 24
   }
 })
 

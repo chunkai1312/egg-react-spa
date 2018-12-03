@@ -1,7 +1,9 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
 import { withNamespaces } from 'react-i18next'
 import { Link } from 'react-router-dom'
+import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
 import Grow from '@material-ui/core/Grow'
@@ -15,7 +17,15 @@ import Avatar from '@material-ui/core/Avatar'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
-// import UserProfilePopover from './UserProfilePopover'
+const styles = theme => ({
+  button: {
+    padding: 0
+  },
+  avatar: {
+    width: 36,
+    height: 36
+  }
+})
 
 class AuthUserAvatar extends React.Component {
   state = {
@@ -34,12 +44,13 @@ class AuthUserAvatar extends React.Component {
   }
 
   render () {
-    const { t } = this.props
+    const { t, classes } = this.props
     const { auth: { user, logout } } = this.context
     const { open } = this.state
     return (
       <React.Fragment>
         <IconButton
+          className={classes.button}
           buttonRef={node => {
             this.anchorEl = node
           }}
@@ -48,8 +59,8 @@ class AuthUserAvatar extends React.Component {
           onClick={this.handleToggle}
         >
           {user && user.photo_url
-            ? <Avatar alt="Avatar" src={user.photo_url} />
-            : <Avatar>{user.name.substr(0, 1)}</Avatar>
+            ? <Avatar className={classes.avatar} alt="Avatar" src={user.photo_url} />
+            : <Avatar className={classes.avatar}>{user.name.substr(0, 1)}</Avatar>
           }
         </IconButton>
         <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
@@ -86,11 +97,15 @@ class AuthUserAvatar extends React.Component {
 }
 
 AuthUserAvatar.propTypes = {
-  t: PropTypes.func.isRequired
+  t: PropTypes.func.isRequired,
+  classes: PropTypes.object.isRequired
 }
 
 AuthUserAvatar.contextTypes = {
   auth: PropTypes.object
 }
 
-export default withNamespaces()(AuthUserAvatar)
+export default compose(
+  withNamespaces(),
+  withStyles(styles)
+)(AuthUserAvatar)

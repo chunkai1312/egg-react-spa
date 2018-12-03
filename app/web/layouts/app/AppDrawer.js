@@ -7,16 +7,33 @@ import Drawer from '@material-ui/core/Drawer'
 import SwipeableDrawer from '@material-ui/core/SwipeableDrawer'
 import Divider from '@material-ui/core/Divider'
 import Hidden from '@material-ui/core/Hidden'
+import Typography from '@material-ui/core/Typography'
 import AppTitle from './AppTitle'
 import AppUser from './AppUser'
 import AppDrawerNavItem from './AppDrawerNavItem'
 
 const styles = theme => ({
+  nav: {
+    display: 'flex',
+    flexDirection: 'column',
+    minHeight: '100vh'
+  },
+  grow: {
+    flex: '1 1 auto'
+  },
   paper: {
     width: 250,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[4],
     borderRight: 0
+  },
+  footer: {
+    [theme.breakpoints.down('sm')]: {
+      padding: `15px ${theme.spacing.unit * 2}px`
+    },
+    [theme.breakpoints.up('sm')]: {
+      padding: `15px ${theme.spacing.unit * 3}px`
+    }
   }
 })
 
@@ -46,11 +63,17 @@ function AppDrawer (props, context) {
           />
         ))}
       </List>
+      <div className={classes.grow} />
+      <div className={classes.footer}>
+        <Typography variant="caption" color="textSecondary">
+          {process.env.APP_NAME}&ensp;{`v${process.env.APP_VERSION}`}
+        </Typography>
+      </div>
     </div>
   )
 
   return (
-    <div className={className}>
+    <nav className={className}>
       <Hidden lgUp={!disablePermanent}>
         <SwipeableDrawer
           classes={{
@@ -81,7 +104,7 @@ function AppDrawer (props, context) {
           </Drawer>
         </Hidden>
       )}
-    </div>
+    </nav>
   )
 }
 

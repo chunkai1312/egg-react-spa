@@ -13,8 +13,9 @@ module.exports = {
     "fileName": "../../../config/manifest.json"
   },
   "define": {
-    "process.env.APP_NAME": process.env.APP_NAME || "App Name",
-    "process.env.APP_VERSION": process.env.APP_VERSION ||"0.0.0"
+    "process.env.APP_NAME": process.env.APP_NAME || name,
+    "process.env.APP_VERSION": process.env.APP_VERSION || version,
+    "process.env.APP_TITLE": process.env.APP_TITLE || "Egg-React SPA",
   },
   "es5ImcompatibleVersions": true
 }
