@@ -9,15 +9,20 @@ import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
+import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
 import ListItemSecondaryAction from '@material-ui/core/ListItemSecondaryAction'
 import Tooltip from '@material-ui/core/Tooltip'
 import IconButton from '@material-ui/core/IconButton'
 import EditIcon from '@material-ui/icons/Edit'
 import LockIcon from '@material-ui/icons/Lock'
+import LinkIcon from '@material-ui/icons/Link'
+import LinkOffIcon from '@material-ui/icons/LinkOff'
 import PageContent from '../../components/PageContent'
 import ProfileUpdateFormDialog from './ProfileUpdateFormDialog'
 import PasswordChangeFormDialog from './PasswordChangeFormDialog'
+import FacebookIcon from '../../components/FacebookIcon'
+import GoogleIcon from '../../components/GoogleIcon'
 
 const styles = theme => ({
   paper: {
@@ -86,6 +91,8 @@ class SettingsPage extends React.Component {
     const { t, classes } = this.props
     const { auth: { user } } = this.context
     const { openProfileUpdateFormDialog, openPasswordChangeFormDialog } = this.state
+    const google = user && user.providers && user.providers.find(provider => provider.provider === 'google')
+    const facebook = user && user.providers && user.providers.find(provider => provider.provider === 'facebook')
     return (
       <PageContent>
         <Typography variant="h5" gutterBottom>
@@ -94,10 +101,7 @@ class SettingsPage extends React.Component {
         <Paper className={classes.paper}>
           <List dense>
             <ListItem dense divider>
-              <ListItemText
-                primary={t('name')}
-                secondary={user && user.name}
-              />
+              <ListItemText primary={t('name')} secondary={user && user.name} />
               <ListItemSecondaryAction>
                 <Tooltip title={t('update')}>
                   <IconButton onClick={this.handleProfileUpdateActionClick}>
@@ -106,17 +110,18 @@ class SettingsPage extends React.Component {
                 </Tooltip>
               </ListItemSecondaryAction>
             </ListItem>
-            <ListItem dense divider>
-              <ListItemText
-                primary={t('email')}
-                secondary={user && user.email}
-              />
-            </ListItem>
             <ListItem dense>
-              <ListItemText
-                primary={t('password')}
-                secondary="**********"
-              />
+              <ListItemText primary={t('email')} secondary={user && user.email} />
+            </ListItem>
+          </List>
+        </Paper>
+        <Typography variant="h5" gutterBottom>
+          {t('your_password')}
+        </Typography>
+        <Paper className={classes.paper}>
+          <List dense>
+            <ListItem dense>
+              <ListItemText primary={t('password')} secondary="**********" />
               <ListItemSecondaryAction>
                 <Tooltip title={t('reset_password')}>
                   <IconButton onClick={this.handlePasswordChangeActionClick}>
@@ -127,8 +132,57 @@ class SettingsPage extends React.Component {
             </ListItem>
           </List>
         </Paper>
-        <ProfileUpdateFormDialog
-          user={this.context.auth.user}
+
+        <Typography variant="h5" gutterBottom>
+          {t('linked_accounts')}
+        </Typography>
+        <Paper className={classes.paper}>
+          <List dense>
+            <ListItem dense divider>
+              <ListItemIcon>
+                <GoogleIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={t('oauth_account', { oauth: 'Google' })}
+                secondary={(google && google.provider_user_id) || t('not_yet_linked_oauth_account', { oauth: 'Google' })}
+              />
+              <ListItemSecondaryAction>
+                <Tooltip
+                  title={google
+                    ? t('unlink_oauth_account', { oauth: 'Google' })
+                    : t('link_oauth_account', { oauth: 'Google' })
+                  }
+                >
+                  <IconButton>
+                    {google ? <LinkOffIcon /> : <LinkIcon />}
+                  </IconButton>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+            <ListItem dense>
+              <ListItemIcon>
+                <FacebookIcon />
+              </ListItemIcon>
+              <ListItemText
+                primary={t('oauth_account', { oauth: 'Facebook' })}
+                secondary={(facebook && facebook.provider_user_id) || t('not_yet_linked_oauth_account', { oauth: 'Facebook' })}
+              />
+              <ListItemSecondaryAction>
+                <Tooltip
+                  title={facebook
+                    ? t('unlink_oauth_account', { oauth: 'Facebook' })
+                    : t('link_oauth_account', { oauth: 'Facebook' })
+                  }
+                >
+                  <IconButton>
+                    {facebook ? <LinkOffIcon /> : <LinkIcon />}
+                  </IconButton>
+                </Tooltip>
+              </ListItemSecondaryAction>
+            </ListItem>
+          </List>
+        </Paper>
+        <ProfileUpdateFormDialog user={this.context.auth.user}
           open={openProfileUpdateFormDialog}
           onClose={this.handleProfileUpdateFormDialogClose}
         />

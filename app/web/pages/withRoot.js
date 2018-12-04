@@ -20,6 +20,11 @@ const pages = [
     title: false
   },
   {
+    pathname: '/signup',
+    displayNav: false,
+    title: false
+  },
+  {
     pathname: '/password/forgot',
     displayNav: false,
     title: false

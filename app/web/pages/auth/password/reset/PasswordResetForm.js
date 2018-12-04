@@ -22,21 +22,8 @@ const styles = theme => ({
     marginTop: -12,
     marginLeft: -12
   },
-  marginSmall: {
-    minHeight: theme.spacing.unit * 1
-  },
-  marginLarge: {
-    minHeight: theme.spacing.unit * 4
-  },
   button: {
     margin: `${theme.spacing.unit}px 0`
-  },
-  noSpace: {
-    margin: 0,
-    padding: 0
-  },
-  leftIcon: {
-    marginRight: theme.spacing.unit
   },
   form: {
     width: '100%', // Fix IE 11 issue.

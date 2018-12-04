@@ -8,6 +8,7 @@ import { setLoading } from './store/modules/app'
 import { initAuthFromExistingToken } from './store/modules/auth'
 import home from './pages/home'
 import login from './pages/auth/login'
+import signup from './pages/auth/signup'
 import about from './pages/about'
 import settings from './pages/settings'
 import forgot from './pages/auth/password/forget'
@@ -27,6 +28,7 @@ class App extends React.Component {
           <Route path="/about" exact component={userIsAuthenticated(about)} />
           <Route path="/settings" exact component={userIsAuthenticated(settings)} />
           <Route path="/login" exact component={userIsNotAuthenticated(login)} />
+          <Route path="/signup" exact component={userIsNotAuthenticated(signup)} />
           <Route path="/password/forgot" exact component={userIsNotAuthenticated(forgot)} />
           <Route path="/password/reset/:token" component={userIsNotAuthenticated(reset)} />
           {/* NOTE: put other app routes here */}

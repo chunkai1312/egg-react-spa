@@ -29,12 +29,16 @@ const styles = theme => ({
   }
 })
 
-function PasswordForgotForm (props, context) {
+function LoginForm (props, context) {
   const { t, classes, onSubmit } = props
-
   return (
     <Formik
-      initialValues={{ email: '' }}
+      initialValues={{
+        name: '',
+        email: '',
+        password: '',
+        password_confirmation: ''
+      }}
       validate={values => {
         const errors = {}
         if (!values.email) {
@@ -44,15 +48,24 @@ function PasswordForgotForm (props, context) {
         ) {
           errors.email = 'Please enter a valid email address.'
         }
+        if (!values.password) {
+          errors.password = 'Required.'
+        }
+        if (values.password !== values.password_confirmation) {
+          errors.password_confirmation = 'Password mismatch.'
+        }
         return errors
       }}
       onSubmit={onSubmit}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
-        <Form className={classes.form}>
-          <Field name="email" component={TextField} label={t('email')} margin="normal" fullWidth />
+        <Form>
+          <Field name="name" label={t('name')} margin="normal" fullWidth component={TextField} />
+          <Field name="email" label={t('email')} margin="normal" fullWidth component={TextField} />
+          <Field name="password" type="password" label={t('password')} margin="normal" fullWidth component={TextField} />
+          <Field name="password_confirmation" type="password" label={t('confirm_password')} margin="normal" fullWidth component={TextField} />
           <div className={classes.wrapper}>
             <Button type="submit" variant="contained" size='large' color="primary" fullWidth className={classes.button} disabled={isSubmitting}>
-              {t('send_password_reset_link')}
+              {t('register')}
             </Button>
             {isSubmitting && <CircularProgress size={24} className={classes.buttonProgress} />}
           </div>
@@ -62,7 +75,7 @@ function PasswordForgotForm (props, context) {
   )
 }
 
-PasswordForgotForm.propTypes = {
+LoginForm.propTypes = {
   t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired
@@ -71,4 +84,4 @@ PasswordForgotForm.propTypes = {
 export default compose(
   withNamespaces(),
   withStyles(styles)
-)(PasswordForgotForm)
+)(LoginForm)
