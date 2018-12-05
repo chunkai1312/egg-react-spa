@@ -1,9 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import qs from 'query-string'
+import axios from 'axios'
+import compose from 'recompose/compose'
 import { withRouter } from 'react-router-dom'
 import { withNamespaces } from 'react-i18next'
-import { compose } from 'recompose'
-import qs from 'query-string'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -32,7 +33,7 @@ const styles = theme => ({
 })
 
 function PasswordResetForm (props, context) {
-  const { t, classes, match, location, onSubmit } = props
+  const { t, classes, match, location, onSubmitSuccess, onSubmitFailure } = props
   const email = qs.parse(location.search).email
   return (
     <Formik
@@ -52,7 +53,13 @@ function PasswordResetForm (props, context) {
         }
         return errors
       }}
-      onSubmit={onSubmit}
+      onSubmit={(values, actions) => {
+        setTimeout(() => {
+          axios.post('/api/password/reset', values)
+            .then(res => actions.resetForm() || onSubmitSuccess(res))
+            .catch(err => actions.resetForm() || onSubmitFailure(err))
+        }, 500)
+      }}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
         <Form className={classes.form}>
           <Field name="email" type="email" component={TextField} label={t('email')} margin="normal" fullWidth disabled />
@@ -76,7 +83,8 @@ PasswordResetForm.propTypes = {
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmitSuccess: PropTypes.func,
+  onSubmitFailure: PropTypes.func
 }
 
 export default compose(

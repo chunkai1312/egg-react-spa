@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import axios from 'axios'
 import compose from 'recompose/compose'
 import { withNamespaces } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
@@ -30,7 +31,7 @@ const styles = theme => ({
 })
 
 function PasswordForgotForm (props, context) {
-  const { t, classes, onSubmit } = props
+  const { t, classes, onSubmitSuccess, onSubmitFailure } = props
 
   return (
     <Formik
@@ -46,7 +47,13 @@ function PasswordForgotForm (props, context) {
         }
         return errors
       }}
-      onSubmit={onSubmit}
+      onSubmit={(values, actions) => {
+        setTimeout(() => {
+          axios.post('/api/password/email', values)
+            .then(res => actions.setSubmitting(false) || onSubmitSuccess(res))
+            .catch(err => actions.setSubmitting(false) || onSubmitFailure(err))
+        }, 500)
+      }}
       render={({ submitForm, isSubmitting, values, setFieldValue }) => (
         <Form className={classes.form}>
           <Field name="email" component={TextField} label={t('email')} margin="normal" fullWidth />
@@ -65,7 +72,8 @@ function PasswordForgotForm (props, context) {
 PasswordForgotForm.propTypes = {
   t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  onSubmit: PropTypes.func.isRequired
+  onSubmitSuccess: PropTypes.func,
+  onSubmitFailure: PropTypes.func
 }
 
 export default compose(

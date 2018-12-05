@@ -1,15 +1,16 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import { compose } from 'recompose'
+import compose from 'recompose/compose'
 import { connect } from 'react-redux'
-import axios from 'axios'
 import { withSnackbar } from 'notistack'
+import withStyles from '@material-ui/core/styles/withStyles'
 import Avatar from '@material-ui/core/Avatar'
 import LockIcon from '@material-ui/icons/LockOutlined'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
-import withStyles from '@material-ui/core/styles/withStyles'
 import LoginForm from './LoginForm'
+import LoginWithGoogle from './LoginWithGoogle'
+import LoginWithFacebook from './LoginWithFacebook'
 import LanguageSelector from '../../../components/LanguageSelector'
 import { login } from '../../../store/modules/auth'
 
@@ -56,27 +57,8 @@ const styles = theme => ({
 })
 
 class LoginPage extends React.Component {
-  handleSubmit = (values, actions) => {
-    const { login, enqueueSnackbar } = this.props
-    setTimeout(() => {
-      axios.post('/api/login', values)
-        .then(res => {
-          actions.setSubmitting(false)
-          login(res.data.token)
-        })
-        .catch(err => {
-          actions.setSubmitting(false)
-          enqueueSnackbar(err.response.data.error, { variant: 'error' })
-        })
-    }, 500)
-  }
-
-  handleCallback = (token) => {
-    this.props.login(token)
-  }
-
   render () {
-    const { classes } = this.props
+    const { classes, login, enqueueSnackbar } = this.props
     return (
       <div className={classes.root}>
         <div className={classes.container}>
@@ -88,7 +70,12 @@ class LoginPage extends React.Component {
               <Typography component="h1" variant="h5">
                 Sign in
               </Typography>
-              <LoginForm onSubmit={this.handleSubmit} onCallback={this.handleCallback} />
+              <LoginForm
+                onSubmitSuccess={res => login(res.data.token)}
+                onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
+              />
+              <LoginWithGoogle onCallback={token => login(token)} />
+              <LoginWithFacebook onCallback={token => login(token)} />
               <LanguageSelector />
             </Paper>
           </main>

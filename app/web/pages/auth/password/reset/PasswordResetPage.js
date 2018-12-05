@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { withNamespaces } from 'react-i18next'
 import { Link } from 'react-router-dom'
-import axios from 'axios'
 import { withSnackbar } from 'notistack'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Avatar from '@material-ui/core/Avatar'
@@ -49,27 +48,8 @@ const styles = theme => ({
 })
 
 class PasswordResetPage extends React.Component {
-  handleSubmit = (values, actions) => {
-    const { enqueueSnackbar } = this.props
-    setTimeout(() => {
-      axios.post('/api/password/reset', values)
-        .then(res => {
-          actions.setSubmitting(false)
-          enqueueSnackbar('We have e-mailed your password reset link!', {
-            variant: 'success',
-            action: <Button color="secondary" size="small" component={Link} to="/login">Return to Login</Button>
-          })
-        })
-        .catch(err => {
-          actions.setSubmitting(false)
-          enqueueSnackbar(err.response.data.error, { variant: 'error' })
-        })
-        .then(() => actions.resetForm())
-    }, 500)
-  }
-
   render () {
-    const { t, classes } = this.props
+    const { t, classes, enqueueSnackbar } = this.props
     return (
       <div className={classes.root}>
         <div className={classes.container}>
@@ -79,7 +59,11 @@ class PasswordResetPage extends React.Component {
                 <LockIcon />
               </Avatar>
               <Typography component="h1" variant="h5">{t('reset_password')}</Typography>
-              <PasswordResetForm onSubmit={this.handleSubmit} />
+              <PasswordResetForm
+                onSubmitSuccess={res => enqueueSnackbar(t('password_updated'), { variant: 'success' })}
+                onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
+              />
+              <Button fullWidth component={Link} to="/login">Return to Login</Button>
             </Paper>
           </main>
         </div>
