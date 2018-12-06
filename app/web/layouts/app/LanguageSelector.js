@@ -4,8 +4,12 @@ import { compose } from 'recompose'
 import { withI18n } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
-import Menu from '@material-ui/core/Menu'
+import ClickAwayListener from '@material-ui/core/ClickAwayListener'
+import Grow from '@material-ui/core/Grow'
+import Paper from '@material-ui/core/Paper'
+import Popper from '@material-ui/core/Popper'
 import MenuItem from '@material-ui/core/MenuItem'
+import MenuList from '@material-ui/core/MenuList'
 import Tooltip from '@material-ui/core/Tooltip'
 import LanguageIcon from '@material-ui/icons/Language'
 
@@ -21,51 +25,73 @@ class LanguageSelector extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
-      anchorEl: null,
+      open: false,
       selected: props.i18n.language
     }
   }
 
-  handleClick = event => {
-    this.setState({ anchorEl: event.currentTarget })
-  }
-
-  handleSelect = (event, value) => {
-    this.props.i18n.changeLanguage(value)
-    this.setState({ anchorEl: null, selected: value })
+  handleToggle = () => {
+    this.setState(state => ({ open: !state.open }))
   }
 
   handleClose = event => {
-    this.setState({ anchorEl: null })
+    if (this.anchorEl.contains(event.target)) {
+      return
+    }
+    this.setState({ open: false })
+  }
+
+  handleChange = (event, value) => {
+    this.props.i18n.changeLanguage(value)
+    this.setState({ selected: value })
+    this.handleToggle()
   }
 
   render () {
-    const { className } = this.props
-    const { anchorEl, selected } = this.state
-    // const language = options.find(option => option.value === selected).label
+    const { classes } = this.props
+    const { open, selected } = this.state
     return (
       <React.Fragment>
         <Tooltip title="Change language" enterDelay={300}>
           <IconButton
-            className={className}
+            className={classes.button}
             color="inherit"
-            aria-owns={anchorEl ? 'language-menu' : null}
+            buttonRef={node => {
+              this.anchorEl = node
+            }}
+            aria-owns={open ? 'menu-list-grow' : undefined}
             aria-haspopup="true"
-            onClick={this.handleClick}
+            onClick={this.handleToggle}
           >
             <LanguageIcon />
           </IconButton>
         </Tooltip>
-        <Menu
-          id="language-menu"
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={this.handleClose}
-        >
-          {options.map(option => (
-            <MenuItem key={option.value} onClick={(event) => this.handleSelect(event, option.value)}>{option.label}</MenuItem>
-          ))}
-        </Menu>
+
+        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
+          {({ TransitionProps, placement }) => (
+            <Grow
+              {...TransitionProps}
+              id="menu-list-grow"
+              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+            >
+              <Paper>
+                <ClickAwayListener onClickAway={this.handleClose}>
+                  <MenuList>
+                    {options.map(option => (
+                      <MenuItem
+                        key={option.value}
+                        selected={option.value === selected}
+                        onClick={(event) => this.handleChange(event, option.value)}
+                      >
+                        {option.label}
+                      </MenuItem>
+                    ))}
+                  </MenuList>
+                </ClickAwayListener>
+              </Paper>
+            </Grow>
+          )}
+        </Popper>
       </React.Fragment>
     )
   }
@@ -73,7 +99,7 @@ class LanguageSelector extends React.Component {
 
 LanguageSelector.propTypes = {
   i18n: PropTypes.object.isRequired,
-  className: PropTypes.string
+  classes: PropTypes.object.isRequired
 }
 
 export default compose(
