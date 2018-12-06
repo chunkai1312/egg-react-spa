@@ -1,15 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
-import { withI18n } from 'react-i18next'
+import { withNamespaces } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
 import Button from '@material-ui/core/Button'
 import { FaGoogle as GoogleIcon } from 'react-icons/fa'
 
 const styles = theme => ({
   button: {
-    margin: `${theme.spacing.unit}px 0`,
-    textTransform: 'none'
+    margin: theme.spacing.unit
   },
   leftIcon: {
     marginRight: theme.spacing.unit
@@ -50,6 +49,6 @@ LoginWithGoogle.propTypes = {
 }
 
 export default compose(
-  withI18n(),
+  withNamespaces(),
   withStyles(styles)
 )(LoginWithGoogle)

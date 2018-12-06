@@ -30,5 +30,12 @@
   "password_updated": "您的密碼已經更新!",
   "new_password": "新密碼",
   "login_with": "使用 {{oauth}} 登入",
-  "register_with": "註冊"
+  "register_with": "註冊",
+  "linked_accounts": "連結帳號",
+  "oauth_account": "{{oauth}} 帳號",
+  "link_oauth_account": "連結 {{oauth}} 帳號",
+  "unlink_oauth_account": "取消連結 {{oauth}} 帳號",
+  "not_yet_linked_oauth_account": "尚未連結 {{oauth}} 帳號",
+  "register_now": "還沒有帳號? 現在註冊!",
+  "return_to_login": "返回登入"
 }

@@ -24,8 +24,7 @@ const styles = theme => ({
     marginLeft: -12
   },
   button: {
-    margin: `${theme.spacing.unit}px 0`,
-    textTransform: 'none'
+    margin: `${theme.spacing.unit}px 0`
   },
   form: {
     width: '100%', // Fix IE 11 issue.

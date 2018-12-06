@@ -2,6 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
+import { withNamespaces } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
@@ -51,8 +52,8 @@ const styles = theme => ({
     width: '100%', // Fix IE 11 issue.
     marginTop: theme.spacing.unit
   },
-  submit: {
-    marginTop: theme.spacing.unit * 3
+  button: {
+    margin: theme.spacing.unit
   }
 })
 
@@ -73,7 +74,7 @@ class SignupPage extends React.Component {
   }
 
   render () {
-    const { classes } = this.props
+    const { t, classes } = this.props
     return (
       <div className={classes.root}>
         <div className={classes.container}>
@@ -83,10 +84,10 @@ class SignupPage extends React.Component {
                 <PersonIcon />
               </Avatar>
               <Typography component="h1" variant="h5">
-                Sign Up
+                Sign up
               </Typography>
               <SignupForm onSubmit={this.handleSubmit} />
-              <Button fullWidth component={Link} to="/login">Return to Login</Button>
+              <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
             </Paper>
           </main>
         </div>
@@ -96,6 +97,7 @@ class SignupPage extends React.Component {
 }
 
 SignupPage.propTypes = {
+  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   login: PropTypes.func.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
@@ -111,5 +113,6 @@ export default compose(
     dispatch => ({ login: token => dispatch(login(token)) })
   ),
   withSnackbar,
+  withNamespaces(),
   withStyles(styles)
 )(SignupPage)

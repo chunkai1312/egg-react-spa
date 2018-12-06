@@ -19,11 +19,11 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 
 const styles = theme => ({
   button: {
-    padding: 0
+    // padding: 0
   },
   avatar: {
-    width: 36,
-    height: 36
+    width: 24,
+    height: 24
   }
 })
 

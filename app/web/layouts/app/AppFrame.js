@@ -10,6 +10,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import MenuIcon from '@material-ui/icons/Menu'
 import AppDrawer from './AppDrawer'
 import AuthUserAvatar from './AuthUserAvatar'
+import LanguageSelector from './LanguageSelector'
 
 const styles = theme => ({
   root: {
@@ -108,6 +109,7 @@ class AppFrame extends React.Component {
               </Typography>
             )}
             <div className={classes.grow} />
+            {auth.authenticated && <LanguageSelector />}
             {auth.authenticated && auth.user && <AuthUserAvatar />}
           </Toolbar>
         </AppBar>

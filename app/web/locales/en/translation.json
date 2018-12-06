@@ -30,5 +30,12 @@
   "password_updated": "Your password has been updated!",
   "new_password": "New Password",
   "login_with": "Login with {{oauth}}",
-  "register_with": "Register with"
+  "register_with": "Register with",
+  "linked_accounts": "Linked Accounts",
+  "oauth_account": "{{oauth}} Account",
+  "link_oauth_account": "Link your {{oauth}} account",
+  "unlink_oauth_account": "Unlink your {{oauth}} account",
+  "not_yet_linked_oauth_account": "Not yet linked {{oauth}} account",
+  "register_now": "No account yet? Register now!",
+  "return_to_login": "Return to Login"
 }

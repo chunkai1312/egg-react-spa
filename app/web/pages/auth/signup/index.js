@@ -6,7 +6,7 @@ import withRoot from '../../withRoot'
 function Signup () {
   return (
     <React.Fragment>
-      <DocumentTitle title={`Sign Up | Egg-React SPA`} />
+      <DocumentTitle title={`Register | Egg-React SPA`} />
       <SignupPage />
     </React.Fragment>
   )

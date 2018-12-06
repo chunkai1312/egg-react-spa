@@ -44,6 +44,9 @@ const styles = theme => ({
   avatar: {
     margin: theme.spacing.unit,
     backgroundColor: theme.palette.secondary.main
+  },
+  button: {
+    margin: theme.spacing.unit
   }
 })
 
@@ -58,12 +61,14 @@ class PasswordForgotPage extends React.Component {
               <Avatar className={classes.avatar}>
                 <LockIcon />
               </Avatar>
-              <Typography component="h1" variant="h5">{t('reset_password')}</Typography>
+              <Typography component="h1" variant="h5">
+                Reset Password
+              </Typography>
               <PasswordForgotForm
                 onSubmitSuccess={res => enqueueSnackbar('We have e-mailed your password reset link!', { variant: 'success' })}
                 onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
               />
-              <Button fullWidth component={Link} to="/login">Return to Login</Button>
+              <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
             </Paper>
           </main>
         </div>

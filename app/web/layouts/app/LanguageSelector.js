@@ -3,9 +3,11 @@ import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { withI18n } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
-import Button from '@material-ui/core/Button'
+import IconButton from '@material-ui/core/IconButton'
 import Menu from '@material-ui/core/Menu'
 import MenuItem from '@material-ui/core/MenuItem'
+import Tooltip from '@material-ui/core/Tooltip'
+import LanguageIcon from '@material-ui/icons/Language'
 
 const styles = theme => {}
 
@@ -40,18 +42,20 @@ class LanguageSelector extends React.Component {
   render () {
     const { className } = this.props
     const { anchorEl, selected } = this.state
-    const language = options.find(option => option.value === selected).label
+    // const language = options.find(option => option.value === selected).label
     return (
-      <div>
-        <Button
-          className={className}
-          fullWidth
-          aria-owns={anchorEl ? 'language-menu' : null}
-          aria-haspopup="true"
-          onClick={this.handleClick}
-        >
-          {language}
-        </Button>
+      <React.Fragment>
+        <Tooltip title="Change language" enterDelay={300}>
+          <IconButton
+            className={className}
+            color="inherit"
+            aria-owns={anchorEl ? 'language-menu' : null}
+            aria-haspopup="true"
+            onClick={this.handleClick}
+          >
+            <LanguageIcon />
+          </IconButton>
+        </Tooltip>
         <Menu
           id="language-menu"
           anchorEl={anchorEl}
@@ -62,7 +66,7 @@ class LanguageSelector extends React.Component {
             <MenuItem key={option.value} onClick={(event) => this.handleSelect(event, option.value)}>{option.label}</MenuItem>
           ))}
         </Menu>
-      </div>
+      </React.Fragment>
     )
   }
 }
