@@ -96,21 +96,7 @@ class AuthController extends Controller {
   async oauth () {
     const ctx = this.ctx
     const token = this.app.jwt.sign({ sub: ctx.user.id }, this.config.jwt.secret)
-    ctx.body = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <title>Authenticated</title>
-      </head>
-      <body>
-        Authenticated successfully.
-        <script type="text/javascript">
-          window.opener.postMessage({ token: "${token}" });
-          window.close();
-        </script>
-      </body>
-      </html>
-    `
+    await this.ctx.render('oauth_callback.html', { token })
   }
 
 }

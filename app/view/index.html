@@ -11,7 +11,7 @@
     {% if ctx.app.config.env !== 'local' -%}
       {{ helper.assets.getStyle('index.css') | safe }}
     {%- endif %}
-    <title>Egg-React SPA</title>
+    <title>{{ ctx.app.config.name }}</title>
   </head>
   <body>
     <noscript>
