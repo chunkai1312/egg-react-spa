@@ -14,9 +14,6 @@ import PasswordResetForm from './PasswordResetForm'
 
 const styles = theme => ({
   root: {
-    flex: '1 0 100%'
-  },
-  container: {
     minHeight: '100vh',
     flex: '0 0 auto',
     display: 'flex',
@@ -24,7 +21,7 @@ const styles = theme => ({
     alignItems: 'center',
     backgroundColor: theme.palette.primary.main
   },
-  main: {
+  container: {
     width: 'auto',
     display: 'block', // Fix IE 11 issue.
     marginLeft: theme.spacing.unit * 3,
@@ -56,21 +53,19 @@ class PasswordResetPage extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.container}>
-          <main className={classes.main}>
-            <Paper className={classes.paper} elevation={24}>
-              <Avatar className={classes.avatar}>
-                <LockIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Reset Password
-              </Typography>
-              <PasswordResetForm
-                onSubmitSuccess={res => enqueueSnackbar(t('password_updated'), { variant: 'success' })}
-                onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
-              />
-              <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
-            </Paper>
-          </main>
+          <Paper className={classes.paper} elevation={24}>
+            <Avatar className={classes.avatar}>
+              <LockIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Reset Password
+            </Typography>
+            <PasswordResetForm
+              onSubmitSuccess={res => enqueueSnackbar(t('password_updated'), { variant: 'success' })}
+              onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
+            />
+            <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
+          </Paper>
         </div>
       </div>
     )

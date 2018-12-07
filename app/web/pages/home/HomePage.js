@@ -7,7 +7,7 @@ const styles = theme => ({
   root: {
     flex: '1 0 100%'
   },
-  page: {
+  hero: {
     minHeight: '100vh',
     flex: '0 0 auto',
     display: 'flex',
@@ -24,6 +24,12 @@ const styles = theme => ({
       paddingBottom: theme.spacing.unit * 16
     }
   },
+  logo: {
+    margin: '20px 0',
+    width: '100%',
+    height: '40vw',
+    maxHeight: 230
+  },
   text: {
     paddingLeft: theme.spacing.unit * 4,
     paddingRight: theme.spacing.unit * 4,
@@ -31,18 +37,6 @@ const styles = theme => ({
     flexDirection: 'column',
     alignItems: 'center',
     justifyContent: 'center'
-  },
-  logoContainer: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center'
-  },
-  logo: {
-    margin: '20px 0',
-    width: '100%',
-    height: '40vw',
-    maxHeight: 230
   }
 })
 
@@ -50,16 +44,14 @@ function HomePage (props) {
   const { classes } = props
   return (
     <div className={classes.root}>
-      <div className={classes.page}>
+      <div className={classes.hero}>
         <div className={classes.content}>
-          <div className={classes.logoContainer}>
-            <img className={classes.logo} src={require('../../assets/img/logo.svg')} alt="Logo" />
-          </div>
+          <img className={classes.logo} src={require('../../assets/img/logo.svg')} alt="Logo" />
           <div className={classes.text}>
             <Typography variant="h3" component="h1" color="inherit" gutterBottom>
               {'Egg-React SPA'}
             </Typography>
-            <Typography variant="h5" component="h2" color="inherit" className={classes.headline}>
+            <Typography variant="h5" component="h2" color="inherit">
               {'Starter Boilerplate SPA made with Egg and React'}
             </Typography>
           </div>

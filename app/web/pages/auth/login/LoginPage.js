@@ -18,9 +18,6 @@ import { login } from '../../../store/modules/auth'
 
 const styles = theme => ({
   root: {
-    flex: '1 0 100%'
-  },
-  container: {
     minHeight: '100vh',
     flex: '0 0 auto',
     display: 'flex',
@@ -28,7 +25,7 @@ const styles = theme => ({
     alignItems: 'center',
     backgroundColor: theme.palette.primary.main
   },
-  main: {
+  container: {
     width: 'auto',
     display: 'block', // Fix IE 11 issue.
     marginLeft: theme.spacing.unit * 3,
@@ -67,25 +64,23 @@ class LoginPage extends React.Component {
     return (
       <div className={classes.root}>
         <div className={classes.container}>
-          <main className={classes.main}>
-            <Paper className={classes.paper} elevation={24}>
-              <Avatar className={classes.avatar}>
-                <PersonIcon />
-              </Avatar>
-              <Typography component="h1" variant="h5">
-                Sign in
-              </Typography>
-              <LoginForm
-                onSubmitSuccess={res => login(res.data.token)}
-                onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
-              />
-              <LoginWithGoogle onCallback={token => login(token)} />
-              <LoginWithFacebook onCallback={token => login(token)} />
-              <Button className={classes.button} fullWidth component={Link} to="/signup">
-                {t('register_now')}
-              </Button>
-            </Paper>
-          </main>
+          <Paper className={classes.paper} elevation={24}>
+            <Avatar className={classes.avatar}>
+              <PersonIcon />
+            </Avatar>
+            <Typography component="h1" variant="h5">
+              Sign in
+            </Typography>
+            <LoginForm
+              onSubmitSuccess={res => login(res.data.token)}
+              onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
+            />
+            <LoginWithGoogle onCallback={token => login(token)} />
+            <LoginWithFacebook onCallback={token => login(token)} />
+            <Button className={classes.button} fullWidth component={Link} to="/signup">
+              {t('register_now')}
+            </Button>
+          </Paper>
         </div>
       </div>
     )

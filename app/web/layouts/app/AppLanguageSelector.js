@@ -21,7 +21,7 @@ const options = [
   { label: '中文 (简体)', value: 'zh-CN' }
 ]
 
-class LanguageSelector extends React.Component {
+class AppLanguageSelector extends React.Component {
   constructor (props) {
     super(props)
     this.state = {
@@ -97,7 +97,7 @@ class LanguageSelector extends React.Component {
   }
 }
 
-LanguageSelector.propTypes = {
+AppLanguageSelector.propTypes = {
   i18n: PropTypes.object.isRequired,
   classes: PropTypes.object.isRequired
 }
@@ -105,4 +105,4 @@ LanguageSelector.propTypes = {
 export default compose(
   withI18n(),
   withStyles(styles)
-)(LanguageSelector)
+)(AppLanguageSelector)

@@ -1,55 +1,34 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import classNames from 'classnames'
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
-import Typography from '@material-ui/core/Typography'
-import AppBar from '@material-ui/core/AppBar'
-import Toolbar from '@material-ui/core/Toolbar'
-import IconButton from '@material-ui/core/IconButton'
 import CssBaseline from '@material-ui/core/CssBaseline'
-import MenuIcon from '@material-ui/icons/Menu'
+import Hidden from '@material-ui/core/Hidden'
 import AppDrawer from './AppDrawer'
-import AuthUserAvatar from './AuthUserAvatar'
-import LanguageSelector from './LanguageSelector'
+import AppHeader from './AppHeader'
+
+const drawerWidth = 256
 
 const styles = theme => ({
   root: {
-    display: 'flex'
-  },
-  grow: {
-    flex: '1 1 auto'
-  },
-  title: {
-    marginLeft: 24,
-    flex: '0 1 auto'
-  },
-  appBar: {
-    transition: theme.transitions.create('width'),
-    '@media print': {
-      position: 'absolute'
-    }
-  },
-  appBarHome: {
-    boxShadow: 'none'
-  },
-  appBarShift: {
-    [theme.breakpoints.up('lg')]: {
-      width: 'calc(100% - 250px)'
-    }
+    display: 'flex',
+    minHeight: '100vh'
   },
   drawer: {
-    [theme.breakpoints.up('lg')]: {
-      width: 250
+    [theme.breakpoints.up('sm')]: {
+      width: drawerWidth,
+      flexShrink: 0
     }
   },
-  navIconHide: {
-    [theme.breakpoints.up('lg')]: {
-      display: 'none'
-    }
+  appContent: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column'
   },
-  authUserAvatar: {
-    width: 24,
-    height: 24
+  mainContent: {
+    flex: 1,
+    padding: '48px 36px 0'
   }
 })
 
@@ -58,12 +37,8 @@ class AppFrame extends React.Component {
     mobileOpen: false
   }
 
-  handleDrawerOpen = () => {
-    this.setState({ mobileOpen: true })
-  }
-
-  handleDrawerClose = () => {
-    this.setState({ mobileOpen: false })
+  handleDrawerToggle = () => {
+    this.setState(state => ({ mobileOpen: !state.mobileOpen }))
   }
 
   render () {
@@ -74,53 +49,34 @@ class AppFrame extends React.Component {
       throw new Error('Missing activePage.')
     }
 
-    const title = activePage.title !== false ? this.context.activePage.title : null
-    let disablePermanent = false
-    let navIconClassName = ''
-    let appBarClassName = classes.appBar
-
-    if (title === null) {
-      // home route, don't shift app bar or dock drawer
-      disablePermanent = true
-      appBarClassName += ` ${classes.appBarHome}`
-    } else {
-      navIconClassName = classes.navIconHide
-      appBarClassName += ` ${classes.appBarShift}`
-    }
+    const disablePermanent = !activePage.title && true
 
     return (
       <div className={classes.root}>
         <CssBaseline />
-        <AppBar className={appBarClassName}>
-          <Toolbar>
-            {auth.authenticated && (
-              <IconButton
-                color="inherit"
-                aria-label="Open drawer"
-                onClick={this.handleDrawerOpen}
-                className={navIconClassName}
-              >
-                <MenuIcon />
-              </IconButton>
-            )}
-            {title !== null && (
-              <Typography className={classes.title} variant="h6" color="inherit" noWrap>
-                {title}
-              </Typography>
-            )}
-            <div className={classes.grow} />
-            {auth.authenticated && <LanguageSelector />}
-            {auth.authenticated && auth.user && <AuthUserAvatar />}
-          </Toolbar>
-        </AppBar>
-        <AppDrawer
-          className={classes.drawer}
-          disablePermanent={disablePermanent}
-          onClose={this.handleDrawerClose}
-          onOpen={this.handleDrawerOpen}
-          mobileOpen={this.state.mobileOpen}
-        />
-        {children}
+        {auth.authenticated ? (
+          <React.Fragment>
+            <nav className={classNames({ [classes.drawer]: !disablePermanent })}>
+              <Hidden smUp={!disablePermanent} implementation="js">
+                <AppDrawer
+                  PaperProps={{ style: { width: drawerWidth } }}
+                  variant="temporary"
+                  open={this.state.mobileOpen}
+                  onClose={this.handleDrawerToggle}
+                />
+              </Hidden>
+              {disablePermanent ? null : (
+                <Hidden xsDown implementation="css">
+                  <AppDrawer PaperProps={{ style: { width: drawerWidth } }} />
+                </Hidden>
+              )}
+            </nav>
+            <div className={classes.appContent}>
+              <AppHeader onDrawerToggle={this.handleDrawerToggle} />
+              <main className={classNames({ [classes.mainContent]: !disablePermanent })}>{children}</main>
+            </div>
+          </React.Fragment>
+        ) : <main className={classes.appContent}>{children}</main>}
       </div>
     )
   }
@@ -132,12 +88,8 @@ AppFrame.propTypes = {
 }
 
 AppFrame.contextTypes = {
-  auth: PropTypes.shape({
-    authenticated: PropTypes.bool.isRequired
-  }).isRequired,
-  activePage: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
-  }).isRequired
+  auth: PropTypes.object.isRequired,
+  activePage: PropTypes.object.isRequired
 }
 
 export default compose(

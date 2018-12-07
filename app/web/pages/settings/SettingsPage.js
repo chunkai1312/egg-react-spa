@@ -18,7 +18,6 @@ import EditIcon from '@material-ui/icons/Edit'
 import LockIcon from '@material-ui/icons/Lock'
 import LinkIcon from '@material-ui/icons/Link'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
-import PageContent from '../../components/PageContent'
 import ProfileUpdateFormDialog from './ProfileUpdateFormDialog'
 import PasswordChangeFormDialog from './PasswordChangeFormDialog'
 import FacebookIcon from '../../components/FacebookIcon'
@@ -28,9 +27,6 @@ const styles = theme => ({
   paper: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 4
-  },
-  faIcon: {
-    fontSize: '1.25rem'
   }
 })
 
@@ -94,7 +90,7 @@ class SettingsPage extends React.Component {
     const google = user && user.providers && user.providers.find(provider => provider.provider === 'google')
     const facebook = user && user.providers && user.providers.find(provider => provider.provider === 'facebook')
     return (
-      <PageContent>
+      <div>
         <Typography variant="h5" gutterBottom>
           {t('your_info')}
         </Typography>
@@ -190,7 +186,7 @@ class SettingsPage extends React.Component {
           open={openPasswordChangeFormDialog}
           onClose={this.handlePasswordChangeFormDialogClose}
         />
-      </PageContent>
+      </div>
     )
   }
 }

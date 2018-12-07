@@ -1,7 +1,6 @@
 import React from 'react'
 // import PropTypes from 'prop-types'
 import { withStyles } from '@material-ui/core/styles'
-import PageContent from '../../components/PageContent'
 
 const styles = theme => ({
   // TODO
@@ -9,7 +8,7 @@ const styles = theme => ({
 
 function AboutPage () {
   return (
-    <PageContent>About Page</PageContent>
+    <div>About Page</div>
   )
 }
 
