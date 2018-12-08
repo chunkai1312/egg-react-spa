@@ -6,41 +6,13 @@ import SettingsIcon from '@material-ui/icons/Settings'
 import PageContext from '../components/PageContext'
 
 const pages = [
-  {
-    pathname: '/',
-    displayNav: false,
-    title: false
-  },
-  {
-    pathname: '/login',
-    displayNav: false,
-    title: false
-  },
-  {
-    pathname: '/signup',
-    displayNav: false,
-    title: false
-  },
-  {
-    pathname: '/password/forgot',
-    displayNav: false,
-    title: false
-  },
-  {
-    pathname: '/password/reset/:token',
-    displayNav: false,
-    title: false
-  },
-  {
-    pathname: '/about',
-    title: 'About',
-    icon: InfoIcon
-  },
-  {
-    pathname: '/settings',
-    title: 'Settings',
-    icon: SettingsIcon
-  }
+  { pathname: '/', title: false, displayNav: false },
+  { pathname: '/login', title: false, displayNav: false },
+  { pathname: '/signup', title: false, displayNav: false },
+  { pathname: '/password/forgot', title: false, displayNav: false },
+  { pathname: '/password/reset/:token', title: false, displayNav: false },
+  { pathname: '/about', title: 'About', icon: InfoIcon },
+  { pathname: '/settings', title: 'Settings', icon: SettingsIcon }
 ]
 
 function findActivePage (currentPages, match) {

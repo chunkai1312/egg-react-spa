@@ -6,7 +6,7 @@ import withRoot from '../../../withRoot'
 function PasswordForgot () {
   return (
     <React.Fragment>
-      <DocumentTitle title={`Forgot your password? | Egg-React SPA`} />
+      <DocumentTitle title={`Forgot your password? | ${process.env.APP_TITLE}`} />
       <PasswordForgotPage />
     </React.Fragment>
   )

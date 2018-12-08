@@ -2,22 +2,22 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
-import Loading from './components/Loading'
 import { userIsAuthenticated, userIsNotAuthenticated } from './helpers/auth'
 import { setLoading } from './store/modules/app'
-import { initAuthFromExistingToken } from './store/modules/auth'
+import { initAuth } from './store/modules/auth'
 import home from './pages/home'
 import login from './pages/auth/login'
 import signup from './pages/auth/signup'
-import about from './pages/about'
-import settings from './pages/settings'
 import forgot from './pages/auth/password/forget'
 import reset from './pages/auth/password/reset'
+import settings from './pages/settings'
+import about from './pages/about'
+import Loading from './components/Loading'
 
 class App extends React.Component {
   componentDidMount () {
-    const { initAuthFromExistingToken, setLoading } = this.props
-    initAuthFromExistingToken(() => setLoading(false))
+    const { loading, initAuth, setLoading } = this.props
+    if (loading) initAuth(() => setLoading(false))
   }
 
   render () {
@@ -40,14 +40,16 @@ class App extends React.Component {
 
 App.propTypes = {
   loading: PropTypes.bool.isRequired,
-  initAuthFromExistingToken: PropTypes.func.isRequired,
-  setLoading: PropTypes.func.isRequired
+  setLoading: PropTypes.func.isRequired,
+  initAuth: PropTypes.func.isRequired
 }
 
 export default connect(
-  state => ({ loading: state.app.loading }),
+  state => ({
+    loading: state.app.loading
+  }),
   dispatch => ({
-    initAuthFromExistingToken: (cb) => dispatch(initAuthFromExistingToken(cb)),
+    initAuth: (cb) => dispatch(initAuth(cb)),
     setLoading: (loading) => dispatch(setLoading(loading))
   })
 )(App)

@@ -2,8 +2,8 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { MuiThemeProvider } from '@material-ui/core/styles'
 import { SnackbarProvider } from 'notistack'
-import theme from '../../styles/theme'
 import AppFrame from './AppFrame'
+import theme from '../../styles/theme'
 
 function AppWrapper (props) {
   const { children } = props

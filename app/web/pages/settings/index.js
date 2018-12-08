@@ -6,7 +6,7 @@ import withRoot from '../withRoot'
 function Settings () {
   return (
     <React.Fragment>
-      <DocumentTitle title={`Settings | Egg-React SPA`} />
+      <DocumentTitle title={`Settings | ${process.env.APP_TITLE}`} />
       <SettingsPage />
     </React.Fragment>
   )

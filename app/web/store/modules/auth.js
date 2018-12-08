@@ -28,7 +28,7 @@ export const logout = cb => dispatch => {
     .catch(() => dispatch(clearAuth()))
 }
 
-export const initAuthFromExistingToken = cb => dispatch => {
+export const initAuth = cb => dispatch => {
   const token = Cookies.get('token')
   if (!token) return cb()
 

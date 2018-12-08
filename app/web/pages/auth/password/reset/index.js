@@ -6,7 +6,7 @@ import withRoot from '../../../withRoot'
 function PasswordReset () {
   return (
     <React.Fragment>
-      <DocumentTitle title={`Reset your password | Egg-React SPA`} />
+      <DocumentTitle title={`Reset your password | ${process.env.APP_TITLE}`} />
       <PasswordResetPage />
     </React.Fragment>
   )

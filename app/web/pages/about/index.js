@@ -6,7 +6,7 @@ import withRoot from '../withRoot'
 function About () {
   return (
     <React.Fragment>
-      <DocumentTitle title={`About | Egg-React SPA`} />
+      <DocumentTitle title={`About | ${process.env.APP_TITLE}`} />
       <AboutPage />
     </React.Fragment>
   )

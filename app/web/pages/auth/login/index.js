@@ -6,7 +6,7 @@ import withRoot from '../../withRoot'
 function Login () {
   return (
     <React.Fragment>
-      <DocumentTitle title={`Login | Egg-React SPA`} />
+      <DocumentTitle title={`Login | ${process.env.APP_TITLE}`} />
       <LoginPage />
     </React.Fragment>
   )

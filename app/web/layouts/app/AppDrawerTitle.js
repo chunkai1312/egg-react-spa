@@ -8,6 +8,9 @@ import Typography from '@material-ui/core/Typography'
 import Avatar from '@material-ui/core/Avatar'
 
 const styles = theme => ({
+  toolbar: {
+    display: 'flex'
+  },
   avatar: {
     marginRight: theme.spacing.unit,
     '&:hover': {
@@ -16,19 +19,10 @@ const styles = theme => ({
   },
   title: {
     textDecoration: 'none'
-  },
-  version: {
-    marginTop: 5
-  },
-  toolbar: {
-    display: 'flex'
-  },
-  grow: {
-    flex: '1 1 auto'
   }
 })
 
-function AppTitle (props) {
+function AppDrawerTitle (props) {
   const { className, classes, title, icon, onIconClick } = props
   return (
     <AppBar className={className} position="static">
@@ -40,7 +34,7 @@ function AppTitle (props) {
   )
 }
 
-AppTitle.propTypes = {
+AppDrawerTitle.propTypes = {
   className: PropTypes.string,
   classes: PropTypes.object.isRequired,
   title: PropTypes.string.isRequired,
@@ -48,10 +42,10 @@ AppTitle.propTypes = {
   onIconClick: PropTypes.func
 }
 
-AppTitle.defaultProps = {
+AppDrawerTitle.defaultProps = {
   icon: null,
   title: process.env.APP_TITLE,
   onIconClick: () => {}
 }
 
-export default withStyles(styles)(AppTitle)
+export default withStyles(styles)(AppDrawerTitle)
