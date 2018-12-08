@@ -30,7 +30,7 @@ const styles = theme => ({
   }
 })
 
-function PasswordForgotForm (props, context) {
+function PasswordForgotForm (props) {
   const { t, classes, onSubmitSuccess, onSubmitFailure } = props
 
   return (

@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
 import classNames from 'classnames'
 import AppBar from '@material-ui/core/AppBar'
 import IconButton from '@material-ui/core/IconButton'
@@ -9,6 +10,8 @@ import Typography from '@material-ui/core/Typography'
 import { withStyles } from '@material-ui/core/styles'
 import AppUserAvatar from './AppUserAvatar'
 import AppLanguageSelector from './AppLanguageSelector'
+import { withPageContext } from '../../components/PageContext'
+import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
   title: {
@@ -25,9 +28,8 @@ const styles = theme => ({
   }
 })
 
-function Header (props, context) {
-  const { classes, onDrawerToggle } = props
-  const { auth, activePage } = context
+function AppHeader (props) {
+  const { classes, onDrawerToggle, auth, activePage } = props
 
   if (!activePage) {
     throw new Error('Missing activePage.')
@@ -59,18 +61,15 @@ function Header (props, context) {
   )
 }
 
-Header.contextTypes = {
-  auth: PropTypes.shape({
-    authenticated: PropTypes.bool.isRequired
-  }).isRequired,
-  activePage: PropTypes.shape({
-    pathname: PropTypes.string.isRequired
-  }).isRequired
-}
-
-Header.propTypes = {
+AppHeader.propTypes = {
   classes: PropTypes.object.isRequired,
-  onDrawerToggle: PropTypes.func.isRequired
+  onDrawerToggle: PropTypes.func.isRequired,
+  auth: PropTypes.object.isRequired,
+  activePage: PropTypes.object.isRequired
 }
 
-export default withStyles(styles)(Header)
+export default compose(
+  withAuth,
+  withPageContext,
+  withStyles(styles)
+)(AppHeader)

@@ -7,6 +7,8 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Hidden from '@material-ui/core/Hidden'
 import AppDrawer from './AppDrawer'
 import AppHeader from './AppHeader'
+import { withPageContext } from '../../components/PageContext'
+import withAuth from '../../components/withAuth'
 
 const drawerWidth = 256
 
@@ -42,8 +44,7 @@ class AppFrame extends React.Component {
   }
 
   render () {
-    const { children, classes } = this.props
-    const { auth, activePage } = this.context
+    const { children, classes, auth, activePage } = this.props
 
     if (!activePage) {
       throw new Error('Missing activePage.')
@@ -84,14 +85,13 @@ class AppFrame extends React.Component {
 
 AppFrame.propTypes = {
   children: PropTypes.node.isRequired,
-  classes: PropTypes.object.isRequired
-}
-
-AppFrame.contextTypes = {
+  classes: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   activePage: PropTypes.object.isRequired
 }
 
 export default compose(
+  withAuth,
+  withPageContext,
   withStyles(styles)
 )(AppFrame)

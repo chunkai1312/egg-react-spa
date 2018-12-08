@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button'
 
 const styles = theme => ({})
 
-function ProfileUpdateFormDialog (props, context) {
+function ProfileUpdateFormDialog (props) {
   const { t, open, onClose, user } = props
   return (
     <Formik

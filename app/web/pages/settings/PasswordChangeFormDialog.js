@@ -13,7 +13,7 @@ import Button from '@material-ui/core/Button'
 
 const styles = theme => ({})
 
-function PasswordChangeFormDialog (props, context) {
+function PasswordChangeFormDialog (props) {
   const { t, open, onClose } = props
   return (
     <Formik

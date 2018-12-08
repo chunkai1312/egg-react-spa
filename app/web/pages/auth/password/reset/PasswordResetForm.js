@@ -32,7 +32,7 @@ const styles = theme => ({
   }
 })
 
-function PasswordResetForm (props, context) {
+function PasswordResetForm (props) {
   const { t, classes, match, location, onSubmitSuccess, onSubmitFailure } = props
   const email = qs.parse(location.search).email
   return (

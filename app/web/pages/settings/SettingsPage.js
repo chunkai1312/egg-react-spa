@@ -22,6 +22,7 @@ import ProfileUpdateFormDialog from './ProfileUpdateFormDialog'
 import PasswordChangeFormDialog from './PasswordChangeFormDialog'
 import FacebookIcon from '../../components/FacebookIcon'
 import GoogleIcon from '../../components/GoogleIcon'
+import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
   paper: {
@@ -84,8 +85,7 @@ class SettingsPage extends React.Component {
   }
 
   render () {
-    const { t, classes } = this.props
-    const { auth: { user } } = this.context
+    const { t, classes, auth: { user } } = this.props
     const { openProfileUpdateFormDialog, openPasswordChangeFormDialog } = this.state
     const google = user && user.providers && user.providers.find(provider => provider.provider === 'google')
     const facebook = user && user.providers && user.providers.find(provider => provider.provider === 'facebook')
@@ -178,7 +178,7 @@ class SettingsPage extends React.Component {
             </ListItem>
           </List>
         </Paper>
-        <ProfileUpdateFormDialog user={this.context.auth.user}
+        <ProfileUpdateFormDialog user={user}
           open={openProfileUpdateFormDialog}
           onClose={this.handleProfileUpdateFormDialogClose}
         />
@@ -194,15 +194,13 @@ class SettingsPage extends React.Component {
 SettingsPage.propTypes = {
   t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  enqueueSnackbar: PropTypes.func.isRequired
-}
-
-SettingsPage.contextTypes = {
+  enqueueSnackbar: PropTypes.func.isRequired,
   auth: PropTypes.object.isRequired
 }
 
 export default compose(
   withNamespaces(),
   withSnackbar,
+  withAuth,
   withStyles(styles)
 )(SettingsPage)

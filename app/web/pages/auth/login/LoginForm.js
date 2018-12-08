@@ -32,7 +32,7 @@ const styles = theme => ({
   }
 })
 
-function LoginForm (props, context) {
+function LoginForm (props) {
   const { t, classes, onSubmitSuccess, onSubmitFailure } = props
   return (
     <Formik

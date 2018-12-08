@@ -16,6 +16,7 @@ import ListItemText from '@material-ui/core/ListItemText'
 import Avatar from '@material-ui/core/Avatar'
 import SettingsIcon from '@material-ui/icons/Settings'
 import ExitToAppIcon from '@material-ui/icons/ExitToApp'
+import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
   button: {
@@ -44,8 +45,7 @@ class AuthUserAvatar extends React.Component {
   }
 
   render () {
-    const { t, classes } = this.props
-    const { auth: { user, logout } } = this.context
+    const { t, classes, auth: { user, logout } } = this.props
     const { open } = this.state
     return (
       <React.Fragment>
@@ -98,14 +98,12 @@ class AuthUserAvatar extends React.Component {
 
 AuthUserAvatar.propTypes = {
   t: PropTypes.func.isRequired,
-  classes: PropTypes.object.isRequired
-}
-
-AuthUserAvatar.contextTypes = {
+  classes: PropTypes.object.isRequired,
   auth: PropTypes.object
 }
 
 export default compose(
   withNamespaces(),
+  withAuth,
   withStyles(styles)
 )(AuthUserAvatar)

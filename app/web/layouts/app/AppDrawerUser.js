@@ -1,8 +1,10 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import Typography from '@material-ui/core/Typography'
+import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
   userInfo: {
@@ -32,9 +34,8 @@ const styles = theme => ({
   }
 })
 
-function AppUser (props, context) {
-  const { classes } = props
-  const { auth: { user } } = context
+function AppDrawerUser (props) {
+  const { classes, auth: { user } } = props
   return (
     <div className={classes.userInfo}>
       {user && user.photo_url
@@ -48,12 +49,12 @@ function AppUser (props, context) {
   )
 }
 
-AppUser.propTypes = {
-  classes: PropTypes.object.isRequired
-}
-
-AppUser.contextTypes = {
+AppDrawerUser.propTypes = {
+  classes: PropTypes.object.isRequired,
   auth: PropTypes.object
 }
 
-export default withStyles(styles)(AppUser)
+export default compose(
+  withAuth,
+  withStyles(styles)
+)(AppDrawerUser)
