@@ -22,8 +22,18 @@ module.exports = app => {
     updated_at: { type: DATE }
   }, { tableName: 'users' })
 
+  User.associate = function () {
+    app.model.User.hasMany(app.model.OauthProvider, { as: 'providers' })
+  }
+
   User.prototype.authenticate = function (password, hashedPassword) {
     return bcrypt.compareSync(password, this.get('password'))
+  }
+
+  User.prototype.toJSON = function () {
+    const values = Object.assign({}, this.get())
+    delete values.password
+    return values
   }
 
   User.beforeSave((user, options) => {

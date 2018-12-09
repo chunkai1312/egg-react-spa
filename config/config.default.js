@@ -5,6 +5,8 @@ module.exports = appInfo => {
 
   config.debug = true
 
+  config.name = 'Egg-React SPA'
+
   config.host = 'http://localhost:7001'
 
   // use for cookie sign key, should change to your own and keep security
