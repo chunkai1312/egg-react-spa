@@ -11,6 +11,7 @@
 - Login, register and password reset
 - Authentication with JWT
 - Passport integration (Google, Facebook)
+- Internationalization with i18next
 - Material UI
 
 ## Installation
