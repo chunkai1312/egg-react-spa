@@ -1,4 +1,8 @@
 {
+  "Home": "首頁",
+  "Settings": "設定",
+  "About": "關於",
+  "Login": "登入",
   "ok": "確定",
   "cancel": "取消",
   "error_alert_title": "錯誤...",

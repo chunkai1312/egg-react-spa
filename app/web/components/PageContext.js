@@ -1,5 +1,6 @@
 import React from 'react'
 import find from 'lodash/find'
+import { NamespacesConsumer } from 'react-i18next'
 
 const PageContext = React.createContext({
   pages: [],
@@ -31,16 +32,26 @@ function findActivePage (currentPages, match) {
 export function PageContextProvider (props) {
   const { children, pages, match } = props // eslint-disable-line
   return (
-    <PageContext.Provider value={{ pages, activePage: findActivePage(pages, match) }}>
-      {children}
-    </PageContext.Provider>
+    <NamespacesConsumer>
+      {t => {
+        const formatPages = pages.map(page => page.title ? { ...page, title: t(page.title) } : page)
+        return (
+          <PageContext.Provider value={{ pages: formatPages, activePage: findActivePage(formatPages, match) }}>
+            {children}
+          </PageContext.Provider>
+        )
+      }}
+    </NamespacesConsumer>
   )
 }
 
 export function withPageContext (WrappedComponent) {
   const ComponentWithPageContext = props => (
     <PageContext.Consumer>
-      {ctx => <WrappedComponent pages={ctx.pages} activePage={ctx.activePage} {...props} />}
+      {ctx => {
+        if (!ctx.activePage) throw new Error('Missing activePage.')
+        return <WrappedComponent pages={ctx.pages} activePage={ctx.activePage} {...props} />
+      }}
     </PageContext.Consumer>
   )
   return ComponentWithPageContext

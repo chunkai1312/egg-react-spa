@@ -1,4 +1,7 @@
 {
+  "Home": "Home",
+  "Settings": "Settings",
+  "About": "About",
   "ok": "Ok",
   "cancel": "Cancel",
   "error_alert_title": "Oops...",

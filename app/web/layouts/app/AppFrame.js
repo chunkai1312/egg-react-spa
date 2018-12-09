@@ -1,5 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
+import DocumentTitle from 'react-document-title'
 import classNames from 'classnames'
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
@@ -45,16 +46,13 @@ class AppFrame extends React.Component {
 
   render () {
     const { children, classes, auth, activePage } = this.props
-
-    if (!activePage) {
-      throw new Error('Missing activePage.')
-    }
-
+    const title = activePage.title ? `${activePage.title} | ${process.env.APP_TITLE}` : process.env.APP_TITLE
     const disablePermanent = !activePage.title && true
 
     return (
       <div className={classes.root}>
         <CssBaseline />
+        <DocumentTitle title={title} />
         {auth.authenticated ? (
           <React.Fragment>
             <nav className={classNames({ [classes.drawer]: !disablePermanent })}>

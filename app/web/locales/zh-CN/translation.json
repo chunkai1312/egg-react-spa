@@ -1,4 +1,7 @@
 {
+  "Home": "首页",
+  "Settings": "设置",
+  "About": "关于",
   "ok": "确定",
   "cancel": "取消",
   "error_alert_title": "错误...",

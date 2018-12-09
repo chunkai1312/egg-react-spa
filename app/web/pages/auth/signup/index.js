@@ -1,15 +1,9 @@
 import React from 'react'
-import DocumentTitle from 'react-document-title'
 import SignupPage from './SignupPage'
 import withRoot from '../../withRoot'
 
-function Signup (props) {
-  return (
-    <React.Fragment>
-      <DocumentTitle title={`Register | ${process.env.APP_TITLE}`} />
-      <SignupPage {...props} />
-    </React.Fragment>
-  )
+function Page (props) {
+  return <SignupPage {...props} />
 }
 
-export default withRoot(Signup)
+export default withRoot(Page)
