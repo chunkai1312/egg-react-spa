@@ -89,7 +89,7 @@ AppFrame.propTypes = {
 }
 
 export default compose(
-  withAuth,
   withPageContext,
+  withAuth,
   withStyles(styles)
 )(AppFrame)

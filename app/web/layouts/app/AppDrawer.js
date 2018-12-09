@@ -4,16 +4,16 @@ import classNames from 'classnames'
 import { Link } from 'react-router-dom'
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
+import Drawer from '@material-ui/core/Drawer'
 import AppBar from '@material-ui/core/AppBar'
 import Toolbar from '@material-ui/core/Toolbar'
 import Avatar from '@material-ui/core/Avatar'
+import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider'
-import Drawer from '@material-ui/core/Drawer'
 import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import Typography from '@material-ui/core/Typography'
 import { withPageContext } from '../../components/PageContext'
 import withAuth from '../../components/withAuth'
 
@@ -149,7 +149,7 @@ AppDrawer.defaultProps = {
 }
 
 export default compose(
-  withAuth,
   withPageContext,
+  withAuth,
   withStyles(styles)
 )(AppDrawer)

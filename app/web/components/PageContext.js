@@ -32,7 +32,7 @@ function findActivePage (currentPages, match) {
 export function PageContextProvider (props) {
   const { children, pages, match } = props // eslint-disable-line
   return (
-    <NamespacesConsumer>
+    <NamespacesConsumer ns={'page'}>
       {t => {
         const formatPages = pages.map(page => page.title ? { ...page, title: t(page.title) } : page)
         return (

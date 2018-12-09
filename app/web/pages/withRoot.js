@@ -6,8 +6,8 @@ import { PageContextProvider } from '../components/PageContext'
 
 const pages = [
   { pathname: '/', title: false, displayNav: false },
-  { pathname: '/login', title: 'Log In', displayNav: false },
-  { pathname: '/signup', title: 'Sign Up', displayNav: false },
+  { pathname: '/login', title: 'Log in', displayNav: false },
+  { pathname: '/signup', title: 'Sign up', displayNav: false },
   { pathname: '/password/forgot', title: 'Forgot your password?', displayNav: false },
   { pathname: '/password/reset/:token', title: 'Reset your password', displayNav: false },
   { pathname: '/about', title: 'About', icon: InfoIcon },
