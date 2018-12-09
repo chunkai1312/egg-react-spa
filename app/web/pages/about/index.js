@@ -3,11 +3,11 @@ import DocumentTitle from 'react-document-title'
 import AboutPage from './AboutPage'
 import withRoot from '../withRoot'
 
-function About () {
+function About (props) {
   return (
     <React.Fragment>
       <DocumentTitle title={`About | ${process.env.APP_TITLE}`} />
-      <AboutPage />
+      <AboutPage {...props} />
     </React.Fragment>
   )
 }

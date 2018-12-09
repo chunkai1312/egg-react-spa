@@ -3,11 +3,11 @@ import DocumentTitle from 'react-document-title'
 import SettingsPage from './SettingsPage'
 import withRoot from '../withRoot'
 
-function Settings () {
+function Settings (props) {
   return (
     <React.Fragment>
       <DocumentTitle title={`Settings | ${process.env.APP_TITLE}`} />
-      <SettingsPage />
+      <SettingsPage {...props} />
     </React.Fragment>
   )
 }

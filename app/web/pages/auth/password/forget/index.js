@@ -3,11 +3,11 @@ import DocumentTitle from 'react-document-title'
 import PasswordForgotPage from './PasswordForgotPage'
 import withRoot from '../../../withRoot'
 
-function PasswordForgot () {
+function PasswordForgot (props) {
   return (
     <React.Fragment>
       <DocumentTitle title={`Forgot your password? | ${process.env.APP_TITLE}`} />
-      <PasswordForgotPage />
+      <PasswordForgotPage {...props} />
     </React.Fragment>
   )
 }

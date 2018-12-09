@@ -14,21 +14,19 @@ const styles = theme => ({
 })
 
 const Loading = props => {
-  const { classes, type, color } = props
+  const { classes, ...others } = props
   return (
     <React.Fragment>
       <CssBaseline />
       <div className={classes.root}>
-        <ReactLoading type={type} color={color} />
+        <ReactLoading {...others} />
       </div>
     </React.Fragment>
   )
 }
 
 Loading.propTypes = {
-  classes: PropTypes.object.isRequired,
-  type: PropTypes.string,
-  color: PropTypes.string
+  classes: PropTypes.object.isRequired
 }
 
 Loading.defaultProps = {

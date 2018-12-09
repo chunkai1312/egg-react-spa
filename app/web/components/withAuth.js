@@ -4,10 +4,9 @@ import { connect } from 'react-redux'
 import * as authActions from '../store/modules/auth'
 
 function withAuth (WrappedComponent) {
-  const ComponentWithAuth = (props) => (
+  const ComponentWithAuth = props => (
     <WrappedComponent {...props} />
   )
-
   return connect(
     (state, ownProps) => state.auth,
     (dispatch) => bindActionCreators(authActions, dispatch),
