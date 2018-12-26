@@ -11,7 +11,13 @@ class UserService extends Service {
    * @return {Promise}
    */
   async find (id) {
-    const user = await this.ctx.model.User.findById(id)
+    const user = await this.ctx.model.User.findById(id, {
+      include: [{
+        model: this.ctx.model.OauthProvider,
+        as: 'providers',
+        attributes: [ 'provider', 'provider_user_id', 'email' ]
+      }]
+    })
     if (!user) this.ctx.throw(404, 'user not found')
     return user
   }
@@ -89,13 +95,48 @@ class UserService extends Service {
 
     const [ oauth ] = await this.ctx.model.OauthProvider.findOrBuild({
       where: { user_id: authUser.id, provider: user.provider, provider_user_id: user.id },
-      defaults: { user_id: authUser.id, provider: user.provider, provider_user_id: user.id }
+      defaults: { user_id: authUser.id, provider: user.provider, provider_user_id: user.id, email: user.email }
     })
     oauth.access_token = user.accessToken || user.token
     oauth.refresh_token = user.refreshToken
     await oauth.save()
 
     return authUser
+  }
+
+  /**
+   * Link oauth provider account of the user.
+   */
+  async linkOauthProvider (id, oauth) {
+    const user = await this.ctx.model.User.findById(id)
+    const [ provider ] = await this.ctx.model.OauthProvider.findOrCreate({
+      where: { user_id: id, provider: oauth.provider, provider_user_id: oauth.id },
+      defaults: {
+        user_id: id,
+        provider: oauth.provider,
+        provider_user_id: oauth.id,
+        email: oauth.email,
+        access_token: oauth.accessToken || oauth.token,
+        refresh_token: oauth.refreshToken
+      }
+    })
+    await user.addProvider(provider)
+    const userWithProviders = await this.ctx.model.User.findById(id, {
+      include: [{ model: this.ctx.model.OauthProvider, as: 'providers' }]
+    })
+    return userWithProviders
+  }
+
+  /**
+   * Unlink oauth provider account of the user.
+   */
+  async unlinkOauthProvider (id, oauth) {
+    const provider = await this.ctx.model.OauthProvider.findOne({ where: { user_id: id, provider: oauth.provider } })
+    if (provider) await provider.destroy()
+    const userWithProviders = await this.ctx.model.User.findById(id, {
+      include: [{ model: this.ctx.model.OauthProvider, as: 'providers' }]
+    })
+    return userWithProviders
   }
 
   /**

@@ -17,6 +17,7 @@ module.exports = app => {
   router.get('/api/users/me', jwt, controller.api.user.me)
   router.patch('/api/settings/profile', jwt, controller.api.settings.updateProfile)
   router.patch('/api/settings/password', jwt, controller.api.settings.updatePassword)
+  router.patch('/api/settings/unlink/:provider', jwt, controller.api.settings.unlinkOauthProvider)
 
   router.get('/api/oauth/google',
     app.passport.authenticate('google', {

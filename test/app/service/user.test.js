@@ -128,6 +128,34 @@ describe('test/app/service/user.test.js', () => {
     })
   })
 
+  describe('linkOauthProvider()', () => {
+    it('should link success', async () => {
+      const user = await app.factory.create('user', { email: 'user@example.com', password: '123456' })
+      const oauth = { id: '1234567890', provider: 'github', email: 'user@github.com', displayName: 'user' }
+      const result = await ctx.service.user.linkOauthProvider(user.id, oauth)
+      assert(result.providers.length === 1)
+      assert(result.providers[0].user_id === user.id)
+      assert(result.providers[0].provider === oauth.provider)
+      assert(result.providers[0].provider_user_id === oauth.id)
+    })
+  })
+
+  describe('unlinkOauthProvider()', () => {
+    it('should unlink success', async () => {
+      const user = await app.factory.create('user', { email: 'user@example.com', password: '123456' })
+      const oauth = await app.factory.create('oauth_provider', { user_id: user.id, provider_id: '1234567890', provider: 'github', email: 'user@github.com' })
+      const result = await ctx.service.user.unlinkOauthProvider(user.id, oauth)
+      assert(result.providers.length === 0)
+    })
+
+    it('should not unlink when provider not found', async () => {
+      const user = await app.factory.create('user', { email: 'user@example.com', password: '123456' })
+      await app.factory.create('oauth_provider', { user_id: user.id, provider_id: '1234567890', provider: 'github', email: 'user@github.com' })
+      const result = await ctx.service.user.unlinkOauthProvider(user.id, { provider: 'google' })
+      assert(result.providers.length === 1)
+    })
+  })
+
   describe('update()', () => {
     it('should update success', async () => {
       const user = await app.factory.create('user', { name: 'user' })

@@ -5,7 +5,7 @@ const Controller = require('egg').Controller
 class SettingsController extends Controller {
 
   /**
-   * POST /api/settings/profile
+   * PATCH /api/settings/profile
    */
   async updateProfile () {
     const ctx = this.ctx
@@ -20,7 +20,7 @@ class SettingsController extends Controller {
   }
 
   /**
-   * POST /api/settings/password
+   * PATCH /api/settings/password
    */
   async updatePassword () {
     const ctx = this.ctx
@@ -35,6 +35,16 @@ class SettingsController extends Controller {
     user.password = password
     await user.save()
 
+    ctx.body = { success: true }
+  }
+
+  /**
+   * PATCH /api/settings/password
+   */
+  async unlinkOauthProvider () {
+    const ctx = this.ctx
+    const provider = ctx.params.provider
+    await ctx.service.user.unlinkOauthProvider(ctx.user.id, { provider })
     ctx.body = { success: true }
   }
 

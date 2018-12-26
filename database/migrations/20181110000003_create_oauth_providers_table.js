@@ -6,9 +6,10 @@ module.exports = {
 
     await queryInterface.createTable('oauth_providers', {
       id: { type: INTEGER, primaryKey: true, autoIncrement: true },
-      user_id: { type: INTEGER.UNSIGNED, allowNull: false, references: { model: 'users', key: 'id' }, onDelete: 'cascade' },
-      provider: { type: STRING, allowNull: false },
-      provider_user_id: { type: STRING, allowNull: false },
+      user_id: { type: INTEGER.UNSIGNED, references: { model: 'users', key: 'id' }, onDelete: 'cascade' },
+      provider: { type: STRING },
+      provider_user_id: { type: STRING },
+      email: { type: STRING },
       access_token: { type: STRING },
       refresh_token: { type: STRING },
       created_at: { type: DATE },

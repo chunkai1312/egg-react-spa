@@ -9,7 +9,8 @@ class UserController extends Controller {
    */
   async me () {
     const ctx = this.ctx
-    ctx.body = ctx.user
+    const data = await ctx.service.user.find(ctx.user.id)
+    ctx.body = data
   }
 
 }

@@ -20,14 +20,18 @@ import LinkIcon from '@material-ui/icons/Link'
 import LinkOffIcon from '@material-ui/icons/LinkOff'
 import ProfileUpdateFormDialog from './ProfileUpdateFormDialog'
 import PasswordChangeFormDialog from './PasswordChangeFormDialog'
+import withAuth from '../../components/withAuth'
+import LoginWithOauth from '../../components/LoginWithOauth'
 import FacebookIcon from '../../components/FacebookIcon'
 import GoogleIcon from '../../components/GoogleIcon'
-import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
   paper: {
     marginTop: theme.spacing.unit * 2,
     marginBottom: theme.spacing.unit * 4
+  },
+  faIcon: {
+    fontSize: '1.25rem'
   }
 })
 
@@ -48,13 +52,12 @@ class SettingsPage extends React.Component {
   handleProfileUpdateFormDialogClose = (values, actions) => {
     if (!values) return this.setState({ openProfileUpdateFormDialog: false })
 
-    const { t, enqueueSnackbar } = this.props
-    const { auth } = this.context
+    const { t, auth, enqueueSnackbar } = this.props
     setTimeout(() => {
       axios.patch('/api/settings/profile', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
         .then(res => {
           actions.setSubmitting(false)
-          auth.setUserData({ ...this.context.auth.user, ...values })
+          auth.setUserData({ ...auth.user, ...values })
           enqueueSnackbar(t('info_updated'), { variant: 'success' })
           this.setState({ openProfileUpdateFormDialog: false })
         })
@@ -68,8 +71,7 @@ class SettingsPage extends React.Component {
   handlePasswordChangeFormDialogClose = (values, actions) => {
     if (!values) return this.setState({ openPasswordChangeFormDialog: false })
 
-    const { t, enqueueSnackbar } = this.props
-    const { auth } = this.context
+    const { t, auth, enqueueSnackbar } = this.props
     setTimeout(() => {
       axios.patch('/api/settings/password', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
         .then(res => {
@@ -82,6 +84,16 @@ class SettingsPage extends React.Component {
           enqueueSnackbar(err.response.data.error, { variant: 'error' })
         })
     }, 500)
+  }
+
+  handleLinkOauthProvider = data => {
+    this.props.auth.login(data.token)
+  }
+
+  handleUnlinkOauthProvider = povider => {
+    const { auth } = this.props
+    axios.patch(`/api/settings/unlink/${povider}`, {}, { headers: { 'Authorization': `Bearer ${auth.token}` } })
+      .then(res => this.props.auth.login(auth.token))
   }
 
   render () {
@@ -140,19 +152,29 @@ class SettingsPage extends React.Component {
               </ListItemIcon>
               <ListItemText
                 primary={t('oauth_account', { oauth: 'Google' })}
-                secondary={(google && google.provider_user_id) || t('not_yet_linked_oauth_account', { oauth: 'Google' })}
+                secondary={(google && google.email) || t('not_yet_linked_oauth_account', { oauth: 'Google' })}
               />
               <ListItemSecondaryAction>
-                <Tooltip
-                  title={google
-                    ? t('unlink_oauth_account', { oauth: 'Google' })
-                    : t('link_oauth_account', { oauth: 'Google' })
-                  }
-                >
-                  <IconButton>
-                    {google ? <LinkOffIcon /> : <LinkIcon />}
-                  </IconButton>
-                </Tooltip>
+                {google ? (
+                  <Tooltip title={t('unlink_oauth_account', { oauth: 'Google' })}>
+                    <IconButton onClick={() => this.handleUnlinkOauthProvider('google')}>
+                      <LinkOffIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <LoginWithOauth
+                    provider="google"
+                    url="/api/oauth/google"
+                    onCallback={this.handleLinkOauthProvider}
+                    render={({ authenticate }) => (
+                      <Tooltip title={t('link_oauth_account', { oauth: 'Google' })}>
+                        <IconButton onClick={authenticate}>
+                          <LinkIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  />
+                )}
               </ListItemSecondaryAction>
             </ListItem>
             <ListItem dense>
@@ -161,19 +183,29 @@ class SettingsPage extends React.Component {
               </ListItemIcon>
               <ListItemText
                 primary={t('oauth_account', { oauth: 'Facebook' })}
-                secondary={(facebook && facebook.provider_user_id) || t('not_yet_linked_oauth_account', { oauth: 'Facebook' })}
+                secondary={(facebook && facebook.email) || t('not_yet_linked_oauth_account', { oauth: 'Facebook' })}
               />
               <ListItemSecondaryAction>
-                <Tooltip
-                  title={facebook
-                    ? t('unlink_oauth_account', { oauth: 'Facebook' })
-                    : t('link_oauth_account', { oauth: 'Facebook' })
-                  }
-                >
-                  <IconButton>
-                    {facebook ? <LinkOffIcon /> : <LinkIcon />}
-                  </IconButton>
-                </Tooltip>
+                {facebook ? (
+                  <Tooltip title={t('unlink_oauth_account', { oauth: 'Facebook' })}>
+                    <IconButton onClick={() => this.handleUnlinkOauthProvider('facebook')}>
+                      <LinkOffIcon />
+                    </IconButton>
+                  </Tooltip>
+                ) : (
+                  <LoginWithOauth
+                    provider="facebook"
+                    url="/api/oauth/facebook"
+                    onCallback={this.handleLinkOauthProvider}
+                    render={({ authenticate }) => (
+                      <Tooltip title={t('link_oauth_account', { oauth: 'Facebook' })}>
+                        <IconButton onClick={authenticate}>
+                          <LinkIcon />
+                        </IconButton>
+                      </Tooltip>
+                    )}
+                  />
+                )}
               </ListItemSecondaryAction>
             </ListItem>
           </List>
@@ -194,13 +226,13 @@ class SettingsPage extends React.Component {
 SettingsPage.propTypes = {
   t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
-  enqueueSnackbar: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired,
+  enqueueSnackbar: PropTypes.func.isRequired
 }
 
 export default compose(
   withNamespaces(),
-  withSnackbar,
   withAuth,
+  withSnackbar,
   withStyles(styles)
 )(SettingsPage)

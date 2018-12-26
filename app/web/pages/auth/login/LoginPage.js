@@ -13,7 +13,7 @@ import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
 import { FaGoogle as GoogleIcon, FaFacebookF as FacebookIcon } from 'react-icons/fa'
 import LoginForm from './LoginForm'
-import LoginWithOauth from './LoginWithOauth'
+import LoginWithOauth from '../../../components/LoginWithOauth'
 import { login } from '../../../store/modules/auth'
 
 const styles = theme => ({
