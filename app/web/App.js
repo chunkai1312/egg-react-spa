@@ -3,7 +3,6 @@ import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { connect } from 'react-redux'
 import { userIsAuthenticated, userIsNotAuthenticated } from './helpers/auth'
-import { setLoading } from './store/modules/app'
 import { initAuth } from './store/modules/auth'
 import home from './pages/home'
 import login from './pages/auth/login'
@@ -15,13 +14,18 @@ import about from './pages/about'
 import Loading from './components/Loading'
 
 class App extends React.Component {
+  state = {
+    loading: true
+  }
+
   componentDidMount () {
-    const { loading, initAuth, setLoading } = this.props
-    if (loading) initAuth(() => setLoading(false))
+    if (this.state.loading) {
+      this.props.initAuth(() => this.setState({ loading: false }))
+    }
   }
 
   render () {
-    return this.props.loading ? <Loading /> : (
+    return this.state.loading ? <Loading /> : (
       <Router>
         <Switch>
           <Route path="/" exact component={userIsAuthenticated(home)} />
@@ -39,17 +43,10 @@ class App extends React.Component {
 }
 
 App.propTypes = {
-  loading: PropTypes.bool.isRequired,
-  setLoading: PropTypes.func.isRequired,
   initAuth: PropTypes.func.isRequired
 }
 
 export default connect(
-  state => ({
-    loading: state.app.loading
-  }),
-  dispatch => ({
-    initAuth: (cb) => dispatch(initAuth(cb)),
-    setLoading: (loading) => dispatch(setLoading(loading))
-  })
+  state => ({ auth: state.auth }),
+  dispatch => ({ initAuth: (cb) => dispatch(initAuth(cb)) })
 )(App)
