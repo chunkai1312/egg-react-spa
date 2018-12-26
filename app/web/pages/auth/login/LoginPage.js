@@ -11,9 +11,9 @@ import PersonIcon from '@material-ui/icons/Person'
 import Paper from '@material-ui/core/Paper'
 import Typography from '@material-ui/core/Typography'
 import Button from '@material-ui/core/Button'
+import { FaGoogle as GoogleIcon, FaFacebookF as FacebookIcon } from 'react-icons/fa'
 import LoginForm from './LoginForm'
-import LoginWithGoogle from './LoginWithGoogle'
-import LoginWithFacebook from './LoginWithFacebook'
+import LoginWithOauth from './LoginWithOauth'
 import { login } from '../../../store/modules/auth'
 
 const styles = theme => ({
@@ -53,6 +53,9 @@ const styles = theme => ({
   button: {
     margin: theme.spacing.unit
   },
+  leftIcon: {
+    marginRight: theme.spacing.unit
+  },
   submit: {
     marginTop: theme.spacing.unit * 3
   }
@@ -75,8 +78,28 @@ class LoginPage extends React.Component {
               onSubmitSuccess={res => login(res.data.token)}
               onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
             />
-            <LoginWithGoogle onCallback={token => login(token)} />
-            <LoginWithFacebook onCallback={token => login(token)} />
+            <LoginWithOauth
+              provider="google"
+              url="/api/oauth/google"
+              onCallback={data => login(data.token)}
+              render={({ authenticate }) => (
+                <Button className={classes.button} fullWidth variant="outlined" color="secondary" onClick={authenticate}>
+                  <GoogleIcon className={classes.leftIcon} />
+                  {t('login_with', { oauth: 'Google' })}
+                </Button>
+              )}
+            />
+            <LoginWithOauth
+              provider="facebook"
+              url="/api/oauth/facebook"
+              onCallback={data => login(data.token)}
+              render={({ authenticate }) => (
+                <Button className={classes.button} fullWidth variant="outlined" color="primary" onClick={authenticate}>
+                  <FacebookIcon className={classes.leftIcon} />
+                  {t('login_with', { oauth: 'Facebook' })}
+                </Button>
+              )}
+            />
             <Button className={classes.button} fullWidth component={Link} to="/signup">
               {t('register_now')}
             </Button>
