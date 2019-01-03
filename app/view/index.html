@@ -8,9 +8,6 @@
     <link rel="manifest" href="/public/manifest.json">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
-    {% if ctx.app.config.env !== 'local' -%}
-      {{ helper.assets.getStyle('index.css') | safe }}
-    {%- endif %}
     <title>{{ ctx.app.config.name }}</title>
   </head>
   <body>

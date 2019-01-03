@@ -46,7 +46,7 @@ class AppFrame extends React.Component {
 
   render () {
     const { children, classes, auth, activePage } = this.props
-    const title = activePage.title ? `${activePage.title} | ${process.env.APP_TITLE}` : process.env.APP_TITLE
+    const title = activePage.title ? `${activePage.title} | ${process.env.APP_NAME}` : process.env.APP_NAME
     const disablePermanent = !activePage.title && true
 
     return (

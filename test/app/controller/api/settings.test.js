@@ -30,4 +30,22 @@ describe('test/app/controller/api/settings.test.js', () => {
       assert(res.status === 200)
     })
   })
+
+  describe('PATCH /api/settings/unlink/:provider', () => {
+    it('should work', async () => {
+      const user = await app.factory.create('user', { id: '1', name: 'user', email: 'user@example.com' })
+
+      await app.factory.create('oauth_provider', {
+        user_id: user.id,
+        provider: 'github',
+        provider_user_id: '1234567890',
+        email: 'user@example.com'
+      })
+
+      app.mockCsrf()
+      const res = await app.httpRequest().patch('/api/settings/unlink/github')
+        .set({ 'Authorization': `Bearer ${token}` })
+      assert(res.status === 200)
+    })
+  })
 })

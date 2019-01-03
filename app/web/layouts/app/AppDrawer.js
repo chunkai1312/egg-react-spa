@@ -144,7 +144,7 @@ AppDrawer.propTypes = {
 }
 
 AppDrawer.defaultProps = {
-  title: process.env.APP_TITLE,
+  title: process.env.APP_NAME,
   icon: require('../../assets/img/logo.svg')
 }
 

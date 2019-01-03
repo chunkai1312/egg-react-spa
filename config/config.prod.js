@@ -1,5 +1,17 @@
 'use strict'
 
-exports.assets = {
-  url: 'http://127.0.0.1:7001'
+module.exports = appInfo => {
+  const config = {}
+
+  /**
+   * The configuration of `egg-view-assets` plugin.
+   *
+   * @member {Object} Config#assets
+   * @see https://github.com/eggjs/egg-view-assets
+   */
+  config.assets = {
+    publicPath: '/public/dist/'
+  }
+
+  return config
 }

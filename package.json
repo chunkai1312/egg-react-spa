@@ -4,6 +4,7 @@
   "description": "Starter Boilerplate SPA made with Egg and React",
   "dependencies": {
     "bcrypt": "^3.0.2",
+    "dotenv": "^6.2.0",
     "egg": "2.10.0",
     "egg-jwt": "^3.1.4",
     "egg-passport": "^2.0.1",
@@ -19,7 +20,6 @@
     "egg-view-nunjucks": "^2.2.0",
     "mysql2": "^1.6.4",
     "nodemailer": "^4.6.8",
-    "nodemailer-smtp-transport": "^2.7.4",
     "pg": "^7.6.1",
     "sqlite3": "^4.0.3",
     "tedious": "^3.0.1"
