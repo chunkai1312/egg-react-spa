@@ -1,6 +1,6 @@
 import React from 'react'
 import find from 'lodash/find'
-import { NamespacesConsumer } from 'react-i18next'
+import { Translation } from 'react-i18next'
 
 const PageContext = React.createContext({
   pages: [],
@@ -32,7 +32,7 @@ function findActivePage (currentPages, match) {
 export function PageContextProvider (props) {
   const { children, pages, match } = props // eslint-disable-line
   return (
-    <NamespacesConsumer ns={'page'}>
+    <Translation ns={'page'}>
       {t => {
         const formatPages = pages.map(page => page.title ? { ...page, title: t(page.title) } : page)
         return (
@@ -41,7 +41,7 @@ export function PageContextProvider (props) {
           </PageContext.Provider>
         )
       }}
-    </NamespacesConsumer>
+    </Translation>
   )
 }
 

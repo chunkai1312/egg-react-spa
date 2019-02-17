@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
 import { withStyles } from '@material-ui/core/styles'
@@ -231,7 +231,7 @@ SettingsPage.propTypes = {
 }
 
 export default compose(
-  withNamespaces(),
+  withTranslation(),
   withAuth,
   withSnackbar,
   withStyles(styles)

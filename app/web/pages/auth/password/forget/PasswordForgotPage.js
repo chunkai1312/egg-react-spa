@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import { compose } from 'recompose'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { withSnackbar } from 'notistack'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Avatar from '@material-ui/core/Avatar'
@@ -79,7 +79,7 @@ PasswordForgotPage.propTypes = {
 }
 
 export default compose(
-  withNamespaces(),
+  withTranslation(),
   withSnackbar,
   withStyles(styles)
 )(PasswordForgotPage)

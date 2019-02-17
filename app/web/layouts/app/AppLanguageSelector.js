@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
-import { withI18n } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
 import IconButton from '@material-ui/core/IconButton'
 import ClickAwayListener from '@material-ui/core/ClickAwayListener'
@@ -103,6 +103,6 @@ AppLanguageSelector.propTypes = {
 }
 
 export default compose(
-  withI18n(),
+  withTranslation(),
   withStyles(styles)
 )(AppLanguageSelector)

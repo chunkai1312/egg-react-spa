@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import axios from 'axios'
 import compose from 'recompose/compose'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -92,6 +92,6 @@ LoginForm.propTypes = {
 }
 
 export default compose(
-  withNamespaces(),
+  withTranslation(),
   withStyles(styles)
 )(LoginForm)

@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { withSnackbar } from 'notistack'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -80,6 +80,6 @@ PasswordResetPage.propTypes = {
 
 export default compose(
   withSnackbar,
-  withNamespaces(),
+  withTranslation(),
   withStyles(styles)
 )(PasswordResetPage)

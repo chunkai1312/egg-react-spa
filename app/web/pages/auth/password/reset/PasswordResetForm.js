@@ -4,7 +4,7 @@ import qs from 'query-string'
 import axios from 'axios'
 import compose from 'recompose/compose'
 import { withRouter } from 'react-router-dom'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -89,6 +89,6 @@ PasswordResetForm.propTypes = {
 
 export default compose(
   withRouter,
-  withNamespaces(),
+  withTranslation(),
   withStyles(styles)
 )(PasswordResetForm)

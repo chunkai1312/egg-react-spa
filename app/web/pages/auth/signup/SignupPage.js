@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
@@ -108,6 +108,6 @@ export default compose(
     dispatch => ({ login: token => dispatch(login(token)) })
   ),
   withSnackbar,
-  withNamespaces(),
+  withTranslation(),
   withStyles(styles)
 )(SignupPage)

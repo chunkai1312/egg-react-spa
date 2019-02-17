@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
 import { Link } from 'react-router-dom'
-import { withNamespaces } from 'react-i18next'
+import { withTranslation } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
@@ -103,7 +103,7 @@ AuthUserAvatar.propTypes = {
 }
 
 export default compose(
-  withNamespaces(),
+  withTranslation(),
   withAuth,
   withStyles(styles)
 )(AuthUserAvatar)
