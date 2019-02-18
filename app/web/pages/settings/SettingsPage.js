@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
-import { withTranslation } from 'react-i18next'
 import axios from 'axios'
+import { useTranslation } from 'react-i18next'
 import { withSnackbar } from 'notistack'
 import { withStyles } from '@material-ui/core/styles'
 import Paper from '@material-ui/core/Paper'
@@ -35,31 +35,27 @@ const styles = theme => ({
   }
 })
 
-class SettingsPage extends React.Component {
-  state = {
-    openProfileUpdateFormDialog: false,
-    openPasswordChangeFormDialog: false
-  }
+function SettingsPage (props) {
+  const { classes, enqueueSnackbar, auth, auth: { user } } = props
+  const [ openProfileUpdateFormDialog, setOpenProfileUpdateFormDialog ] = useState(false)
+  const [ openPasswordChangeFormDialog, setOpenPasswordChangeFormDialog ] = useState(false)
+  const { t } = useTranslation()
+  const google = user && user.providers && user.providers.find(provider => provider.provider === 'google')
+  const facebook = user && user.providers && user.providers.find(provider => provider.provider === 'facebook')
 
-  handleProfileUpdateActionClick = () => {
-    this.setState({ openProfileUpdateFormDialog: true })
-  }
+  const handleProfileUpdateActionClick = () => setOpenProfileUpdateFormDialog(true)
 
-  handlePasswordChangeActionClick = () => {
-    this.setState({ openPasswordChangeFormDialog: true })
-  }
+  const handlePasswordChangeActionClick = () => setOpenPasswordChangeFormDialog(true)
 
-  handleProfileUpdateFormDialogClose = (values, actions) => {
-    if (!values) return this.setState({ openProfileUpdateFormDialog: false })
-
-    const { t, auth, enqueueSnackbar } = this.props
+  const handleProfileUpdateFormDialogClose = (values, actions) => {
+    if (!values) return setOpenProfileUpdateFormDialog(false)
     setTimeout(() => {
       axios.patch('/api/settings/profile', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
         .then(res => {
           actions.setSubmitting(false)
-          auth.setUserData({ ...auth.user, ...values })
           enqueueSnackbar(t('info_updated'), { variant: 'success' })
-          this.setState({ openProfileUpdateFormDialog: false })
+          setOpenProfileUpdateFormDialog(false)
+          auth.setUserData({ ...auth.user, ...values })
         })
         .catch(err => {
           actions.setSubmitting(false)
@@ -68,16 +64,14 @@ class SettingsPage extends React.Component {
     }, 500)
   }
 
-  handlePasswordChangeFormDialogClose = (values, actions) => {
-    if (!values) return this.setState({ openPasswordChangeFormDialog: false })
-
-    const { t, auth, enqueueSnackbar } = this.props
+  const handlePasswordChangeFormDialogClose = (values, actions) => {
+    if (!values) return setOpenPasswordChangeFormDialog(false)
     setTimeout(() => {
       axios.patch('/api/settings/password', values, { headers: { 'Authorization': `Bearer ${auth.token}` } })
         .then(res => {
           actions.resetForm(false)
           enqueueSnackbar(t('password_updated'), { variant: 'success' })
-          this.setState({ openPasswordChangeFormDialog: false })
+          setOpenPasswordChangeFormDialog(false)
         })
         .catch(err => {
           actions.resetForm(false)
@@ -86,152 +80,142 @@ class SettingsPage extends React.Component {
     }, 500)
   }
 
-  handleLinkOauthProvider = data => {
-    this.props.auth.login(data.token)
-  }
+  const handleLinkOauthProvider = data => auth.login(data.token)
 
-  handleUnlinkOauthProvider = povider => {
-    const { auth } = this.props
+  const handleUnlinkOauthProvider = povider => {
     axios.patch(`/api/settings/unlink/${povider}`, {}, { headers: { 'Authorization': `Bearer ${auth.token}` } })
-      .then(res => this.props.auth.login(auth.token))
+      .then(res => auth.login(auth.token))
   }
 
-  render () {
-    const { t, classes, auth: { user } } = this.props
-    const { openProfileUpdateFormDialog, openPasswordChangeFormDialog } = this.state
-    const google = user && user.providers && user.providers.find(provider => provider.provider === 'google')
-    const facebook = user && user.providers && user.providers.find(provider => provider.provider === 'facebook')
-    return (
-      <div>
-        <Typography variant="h5" gutterBottom>
-          {t('your_info')}
-        </Typography>
-        <Paper className={classes.paper}>
-          <List dense>
-            <ListItem dense divider>
-              <ListItemText primary={t('name')} secondary={user && user.name} />
-              <ListItemSecondaryAction>
-                <Tooltip title={t('update')}>
-                  <IconButton onClick={this.handleProfileUpdateActionClick}>
-                    <EditIcon />
-                  </IconButton>
-                </Tooltip>
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem dense>
-              <ListItemText primary={t('email')} secondary={user && user.email} />
-            </ListItem>
-          </List>
-        </Paper>
-        <Typography variant="h5" gutterBottom>
-          {t('your_password')}
-        </Typography>
-        <Paper className={classes.paper}>
-          <List dense>
-            <ListItem dense>
-              <ListItemText primary={t('password')} secondary="**********" />
-              <ListItemSecondaryAction>
-                <Tooltip title={t('reset_password')}>
-                  <IconButton onClick={this.handlePasswordChangeActionClick}>
-                    <LockIcon />
-                  </IconButton>
-                </Tooltip>
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Paper>
+  return (
+    <div>
+      <Typography variant="h5" gutterBottom>
+        {t('your_info')}
+      </Typography>
+      <Paper className={classes.paper}>
+        <List dense>
+          <ListItem dense divider>
+            <ListItemText primary={t('name')} secondary={user && user.name} />
+            <ListItemSecondaryAction>
+              <Tooltip title={t('update')}>
+                <IconButton onClick={handleProfileUpdateActionClick}>
+                  <EditIcon />
+                </IconButton>
+              </Tooltip>
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem dense>
+            <ListItemText primary={t('email')} secondary={user && user.email} />
+          </ListItem>
+        </List>
+      </Paper>
+      <Typography variant="h5" gutterBottom>
+        {t('your_password')}
+      </Typography>
+      <Paper className={classes.paper}>
+        <List dense>
+          <ListItem dense>
+            <ListItemText primary={t('password')} secondary="**********" />
+            <ListItemSecondaryAction>
+              <Tooltip title={t('reset_password')}>
+                <IconButton onClick={handlePasswordChangeActionClick}>
+                  <LockIcon />
+                </IconButton>
+              </Tooltip>
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+      </Paper>
 
-        <Typography variant="h5" gutterBottom>
-          {t('linked_accounts')}
-        </Typography>
-        <Paper className={classes.paper}>
-          <List dense>
-            <ListItem dense divider>
-              <ListItemIcon>
-                <GoogleIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={t('oauth_account', { oauth: 'Google' })}
-                secondary={(google && google.email) || t('not_yet_linked_oauth_account', { oauth: 'Google' })}
-              />
-              <ListItemSecondaryAction>
-                {google ? (
-                  <Tooltip title={t('unlink_oauth_account', { oauth: 'Google' })}>
-                    <IconButton onClick={() => this.handleUnlinkOauthProvider('google')}>
-                      <LinkOffIcon />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  <LoginWithOauth
-                    provider="google"
-                    url="/api/oauth/google"
-                    onCallback={this.handleLinkOauthProvider}
-                    render={({ authenticate }) => (
-                      <Tooltip title={t('link_oauth_account', { oauth: 'Google' })}>
-                        <IconButton onClick={authenticate}>
-                          <LinkIcon />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  />
-                )}
-              </ListItemSecondaryAction>
-            </ListItem>
-            <ListItem dense>
-              <ListItemIcon>
-                <FacebookIcon />
-              </ListItemIcon>
-              <ListItemText
-                primary={t('oauth_account', { oauth: 'Facebook' })}
-                secondary={(facebook && facebook.email) || t('not_yet_linked_oauth_account', { oauth: 'Facebook' })}
-              />
-              <ListItemSecondaryAction>
-                {facebook ? (
-                  <Tooltip title={t('unlink_oauth_account', { oauth: 'Facebook' })}>
-                    <IconButton onClick={() => this.handleUnlinkOauthProvider('facebook')}>
-                      <LinkOffIcon />
-                    </IconButton>
-                  </Tooltip>
-                ) : (
-                  <LoginWithOauth
-                    provider="facebook"
-                    url="/api/oauth/facebook"
-                    onCallback={this.handleLinkOauthProvider}
-                    render={({ authenticate }) => (
-                      <Tooltip title={t('link_oauth_account', { oauth: 'Facebook' })}>
-                        <IconButton onClick={authenticate}>
-                          <LinkIcon />
-                        </IconButton>
-                      </Tooltip>
-                    )}
-                  />
-                )}
-              </ListItemSecondaryAction>
-            </ListItem>
-          </List>
-        </Paper>
-        <ProfileUpdateFormDialog user={user}
-          open={openProfileUpdateFormDialog}
-          onClose={this.handleProfileUpdateFormDialogClose}
-        />
-        <PasswordChangeFormDialog
-          open={openPasswordChangeFormDialog}
-          onClose={this.handlePasswordChangeFormDialogClose}
-        />
-      </div>
-    )
-  }
+      <Typography variant="h5" gutterBottom>
+        {t('linked_accounts')}
+      </Typography>
+      <Paper className={classes.paper}>
+        <List dense>
+          <ListItem dense divider>
+            <ListItemIcon>
+              <GoogleIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={t('oauth_account', { oauth: 'Google' })}
+              secondary={(google && google.email) || t('not_yet_linked_oauth_account', { oauth: 'Google' })}
+            />
+            <ListItemSecondaryAction>
+              {google ? (
+                <Tooltip title={t('unlink_oauth_account', { oauth: 'Google' })}>
+                  <IconButton onClick={() => handleUnlinkOauthProvider('google')}>
+                    <LinkOffIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <LoginWithOauth
+                  provider="google"
+                  url="/api/oauth/google"
+                  onCallback={handleLinkOauthProvider}
+                  render={({ authenticate }) => (
+                    <Tooltip title={t('link_oauth_account', { oauth: 'Google' })}>
+                      <IconButton onClick={authenticate}>
+                        <LinkIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                />
+              )}
+            </ListItemSecondaryAction>
+          </ListItem>
+          <ListItem dense>
+            <ListItemIcon>
+              <FacebookIcon />
+            </ListItemIcon>
+            <ListItemText
+              primary={t('oauth_account', { oauth: 'Facebook' })}
+              secondary={(facebook && facebook.email) || t('not_yet_linked_oauth_account', { oauth: 'Facebook' })}
+            />
+            <ListItemSecondaryAction>
+              {facebook ? (
+                <Tooltip title={t('unlink_oauth_account', { oauth: 'Facebook' })}>
+                  <IconButton onClick={() => handleUnlinkOauthProvider('facebook')}>
+                    <LinkOffIcon />
+                  </IconButton>
+                </Tooltip>
+              ) : (
+                <LoginWithOauth
+                  provider="facebook"
+                  url="/api/oauth/facebook"
+                  onCallback={handleLinkOauthProvider}
+                  render={({ authenticate }) => (
+                    <Tooltip title={t('link_oauth_account', { oauth: 'Facebook' })}>
+                      <IconButton onClick={authenticate}>
+                        <LinkIcon />
+                      </IconButton>
+                    </Tooltip>
+                  )}
+                />
+              )}
+            </ListItemSecondaryAction>
+          </ListItem>
+        </List>
+      </Paper>
+      <ProfileUpdateFormDialog
+        user={user}
+        open={openProfileUpdateFormDialog}
+        onClose={handleProfileUpdateFormDialogClose}
+      />
+      <PasswordChangeFormDialog
+        open={openPasswordChangeFormDialog}
+        onClose={handlePasswordChangeFormDialogClose}
+      />
+    </div>
+  )
 }
 
 SettingsPage.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   auth: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 }
 
 export default compose(
-  withTranslation(),
   withAuth,
   withSnackbar,
   withStyles(styles)

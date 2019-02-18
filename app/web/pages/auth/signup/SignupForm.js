@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import compose from 'recompose/compose'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -30,7 +29,9 @@ const styles = theme => ({
 })
 
 function LoginForm (props) {
-  const { t, classes, onSubmit } = props
+  const { classes, onSubmit } = props
+  const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={{
@@ -76,12 +77,8 @@ function LoginForm (props) {
 }
 
 LoginForm.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onSubmit: PropTypes.func.isRequired
 }
 
-export default compose(
-  withTranslation(),
-  withStyles(styles)
-)(LoginForm)
+export default withStyles(styles)(LoginForm)

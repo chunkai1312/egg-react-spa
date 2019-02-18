@@ -3,7 +3,7 @@ import PropTypes from 'prop-types'
 import { Link } from 'react-router-dom'
 import compose from 'recompose/compose'
 import { connect } from 'react-redux'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { withSnackbar } from 'notistack'
 import withStyles from '@material-ui/core/styles/withStyles'
 import Avatar from '@material-ui/core/Avatar'
@@ -61,72 +61,66 @@ const styles = theme => ({
   }
 })
 
-class LoginPage extends React.Component {
-  render () {
-    const { t, classes, login, enqueueSnackbar } = this.props
-    return (
-      <div className={classes.root}>
-        <div className={classes.container}>
-          <Paper className={classes.paper} elevation={24}>
-            <Avatar className={classes.avatar}>
-              <PersonIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign in
-            </Typography>
-            <LoginForm
-              onSubmitSuccess={res => login(res.data.token)}
-              onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
-            />
-            <LoginWithOauth
-              provider="google"
-              url="/api/oauth/google"
-              onCallback={data => login(data.token)}
-              render={({ authenticate }) => (
-                <Button className={classes.button} fullWidth variant="outlined" color="secondary" onClick={authenticate}>
-                  <GoogleIcon className={classes.leftIcon} />
-                  {t('login_with', { oauth: 'Google' })}
-                </Button>
-              )}
-            />
-            <LoginWithOauth
-              provider="facebook"
-              url="/api/oauth/facebook"
-              onCallback={data => login(data.token)}
-              render={({ authenticate }) => (
-                <Button className={classes.button} fullWidth variant="outlined" color="primary" onClick={authenticate}>
-                  <FacebookIcon className={classes.leftIcon} />
-                  {t('login_with', { oauth: 'Facebook' })}
-                </Button>
-              )}
-            />
-            <Button className={classes.button} fullWidth component={Link} to="/signup">
-              {t('register_now')}
-            </Button>
-          </Paper>
-        </div>
+function LoginPage (props) {
+  const { classes, login, enqueueSnackbar } = props
+  const { t } = useTranslation()
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.container}>
+        <Paper className={classes.paper} elevation={24}>
+          <Avatar className={classes.avatar}>
+            <PersonIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign in
+          </Typography>
+          <LoginForm
+            onSubmitSuccess={res => login(res.data.token)}
+            onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
+          />
+          <LoginWithOauth
+            provider="google"
+            url="/api/oauth/google"
+            onCallback={data => login(data.token)}
+            render={({ authenticate }) => (
+              <Button className={classes.button} fullWidth variant="outlined" color="secondary" onClick={authenticate}>
+                <GoogleIcon className={classes.leftIcon} />
+                {t('login_with', { oauth: 'Google' })}
+              </Button>
+            )}
+          />
+          <LoginWithOauth
+            provider="facebook"
+            url="/api/oauth/facebook"
+            onCallback={data => login(data.token)}
+            render={({ authenticate }) => (
+              <Button className={classes.button} fullWidth variant="outlined" color="primary" onClick={authenticate}>
+                <FacebookIcon className={classes.leftIcon} />
+                {t('login_with', { oauth: 'Facebook' })}
+              </Button>
+            )}
+          />
+          <Button className={classes.button} fullWidth component={Link} to="/signup">
+            {t('register_now')}
+          </Button>
+        </Paper>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 LoginPage.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   login: PropTypes.func.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 }
 
-LoginPage.contextTypes = {
-  router: PropTypes.object.isRequired
-}
-
 export default compose(
+  withSnackbar,
+  withStyles(styles),
   connect(
     state => ({ auth: state.auth }),
     dispatch => ({ login: token => dispatch(login(token)) })
-  ),
-  withSnackbar,
-  withTranslation(),
-  withStyles(styles)
+  )
 )(LoginPage)

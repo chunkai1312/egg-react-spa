@@ -15,6 +15,7 @@ const styles = theme => ({
 
 const Loading = props => {
   const { classes, ...others } = props
+
   return (
     <React.Fragment>
       <CssBaseline />

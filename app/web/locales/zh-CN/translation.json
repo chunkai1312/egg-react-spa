@@ -40,5 +40,6 @@
   "unlink_oauth_account": "取消关联 {{oauth}} 帐户",
   "not_yet_linked_oauth_account": "尚未关联 {{oauth}} 帐户",
   "register_now": "还没有帐户? 现在注册!",
-  "return_to_login": "返回登录"
+  "return_to_login": "返回登录",
+  "version": "版本"
 }

@@ -3,8 +3,8 @@ import PropTypes from 'prop-types'
 import qs from 'query-string'
 import axios from 'axios'
 import compose from 'recompose/compose'
+import { useTranslation } from 'react-i18next'
 import { withRouter } from 'react-router-dom'
-import { withTranslation } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -33,8 +33,10 @@ const styles = theme => ({
 })
 
 function PasswordResetForm (props) {
-  const { t, classes, match, location, onSubmitSuccess, onSubmitFailure } = props
+  const { classes, match, location, onSubmitSuccess, onSubmitFailure } = props
+  const { t } = useTranslation()
   const email = qs.parse(location.search).email
+
   return (
     <Formik
       initialValues={{
@@ -79,7 +81,6 @@ function PasswordResetForm (props) {
 }
 
 PasswordResetForm.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   match: PropTypes.object.isRequired,
   location: PropTypes.object.isRequired,
@@ -89,6 +90,5 @@ PasswordResetForm.propTypes = {
 
 export default compose(
   withRouter,
-  withTranslation(),
   withStyles(styles)
 )(PasswordResetForm)

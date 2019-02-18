@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import compose from 'recompose/compose'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -14,7 +13,9 @@ import Button from '@material-ui/core/Button'
 const styles = theme => ({})
 
 function PasswordChangeFormDialog (props) {
-  const { t, open, onClose } = props
+  const { open, onClose } = props
+  const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={{ password: '', password_confirmation: '' }}
@@ -52,7 +53,6 @@ function PasswordChangeFormDialog (props) {
 }
 
 PasswordChangeFormDialog.propTypes = {
-  t: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired
 }
@@ -61,7 +61,4 @@ PasswordChangeFormDialog.defaultProps = {
   open: false
 }
 
-export default compose(
-  withTranslation(),
-  withStyles(styles)
-)(PasswordChangeFormDialog)
+export default withStyles(styles)(PasswordChangeFormDialog)

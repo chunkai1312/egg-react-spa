@@ -3,7 +3,7 @@
   <meta charset="utf-8">
   <title>{{ ctx.app.config.name }}</title>
   <script>
-    window.opener.postMessage({ token: "{{ token }}" }, "{{ ctx.origin }}")
+    window.opener.postMessage({ token: "{{ token }}" }, "{{ ctx.app.config.url }}")
     window.close()
   </script>
 </head>

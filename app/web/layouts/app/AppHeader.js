@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
 import classNames from 'classnames'
@@ -10,7 +10,7 @@ import Typography from '@material-ui/core/Typography'
 import MenuIcon from '@material-ui/icons/Menu'
 import AppUserAvatar from './AppUserAvatar'
 import AppLanguageSelector from './AppLanguageSelector'
-import { withPageContext } from '../../components/PageContext'
+import PageContext from '../../components/PageContext'
 import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
@@ -29,12 +29,8 @@ const styles = theme => ({
 })
 
 function AppHeader (props) {
-  const { classes, onDrawerToggle, auth, activePage } = props
-
-  if (!activePage) {
-    throw new Error('Missing activePage.')
-  }
-
+  const { classes, onDrawerToggle, auth } = props
+  const { activePage } = useContext(PageContext)
   const title = activePage.title || null
 
   return (
@@ -64,12 +60,10 @@ function AppHeader (props) {
 AppHeader.propTypes = {
   classes: PropTypes.object.isRequired,
   onDrawerToggle: PropTypes.func.isRequired,
-  auth: PropTypes.object.isRequired,
-  activePage: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 }
 
 export default compose(
   withAuth,
-  withPageContext,
   withStyles(styles)
 )(AppHeader)

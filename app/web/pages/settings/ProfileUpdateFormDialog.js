@@ -1,7 +1,6 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import compose from 'recompose/compose'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -14,7 +13,9 @@ import Button from '@material-ui/core/Button'
 const styles = theme => ({})
 
 function ProfileUpdateFormDialog (props) {
-  const { t, open, onClose, user } = props
+  const { open, onClose, user } = props
+  const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={user || { name: '' }}
@@ -45,7 +46,6 @@ function ProfileUpdateFormDialog (props) {
 }
 
 ProfileUpdateFormDialog.propTypes = {
-  t: PropTypes.func.isRequired,
   open: PropTypes.bool.isRequired,
   onClose: PropTypes.func.isRequired,
   user: PropTypes.object
@@ -55,7 +55,4 @@ ProfileUpdateFormDialog.defaultProps = {
   open: false
 }
 
-export default compose(
-  withTranslation(),
-  withStyles(styles)
-)(ProfileUpdateFormDialog)
+export default withStyles(styles)(ProfileUpdateFormDialog)

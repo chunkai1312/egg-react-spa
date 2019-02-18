@@ -40,5 +40,6 @@
   "unlink_oauth_account": "Unlink your {{oauth}} account",
   "not_yet_linked_oauth_account": "Not yet linked {{oauth}} account",
   "register_now": "No account yet? Register now!",
-  "return_to_login": "Return to Login"
+  "return_to_login": "Return to Login",
+  "version": "version"
 }

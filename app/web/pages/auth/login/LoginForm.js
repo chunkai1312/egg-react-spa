@@ -2,8 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
 import axios from 'axios'
-import compose from 'recompose/compose'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
@@ -33,7 +32,9 @@ const styles = theme => ({
 })
 
 function LoginForm (props) {
-  const { t, classes, onSubmitSuccess, onSubmitFailure } = props
+  const { classes, onSubmitSuccess, onSubmitFailure } = props
+  const { t } = useTranslation()
+
   return (
     <Formik
       initialValues={{ email: '', password: '' }}
@@ -85,13 +86,9 @@ function LoginForm (props) {
 }
 
 LoginForm.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onSubmitSuccess: PropTypes.func,
   onSubmitFailure: PropTypes.func
 }
 
-export default compose(
-  withTranslation(),
-  withStyles(styles)
-)(LoginForm)
+export default withStyles(styles)(LoginForm)

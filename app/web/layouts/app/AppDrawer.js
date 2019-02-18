@@ -1,6 +1,7 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 import classNames from 'classnames'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import compose from 'recompose/compose'
 import { withStyles } from '@material-ui/core/styles'
@@ -14,7 +15,7 @@ import List from '@material-ui/core/List'
 import ListItem from '@material-ui/core/ListItem'
 import ListItemIcon from '@material-ui/core/ListItemIcon'
 import ListItemText from '@material-ui/core/ListItemText'
-import { withPageContext } from '../../components/PageContext'
+import PageContext from '../../components/PageContext'
 import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
@@ -87,7 +88,9 @@ const styles = theme => ({
 })
 
 function AppDrawer (props) {
-  const { classes, title, icon, pages, activePage, auth: { user }, ...other } = props
+  const { classes, title, icon, auth: { user }, ...other } = props
+  const { pages, activePage } = useContext(PageContext)
+  const { t } = useTranslation()
   const navItems = pages
     .filter(page => page.displayNav !== false)
     .map(page => (page.pathname === activePage.pathname) ? { ...page, active: true } : page)
@@ -130,7 +133,7 @@ function AppDrawer (props) {
       <div className={classes.grow} />
       <div className={classes.footer}>
         <Typography variant="caption" color="textSecondary">
-          {process.env.APP_NAME}&ensp;{`v${process.env.APP_VERSION}`}
+          {`${process.env.APP_NAME} ${t('version')} ${process.env.APP_VERSION}`}
         </Typography>
       </div>
     </Drawer>
@@ -138,9 +141,7 @@ function AppDrawer (props) {
 }
 
 AppDrawer.propTypes = {
-  classes: PropTypes.object.isRequired,
-  pages: PropTypes.array.isRequired,
-  activePage: PropTypes.object.isRequired
+  classes: PropTypes.object.isRequired
 }
 
 AppDrawer.defaultProps = {
@@ -149,7 +150,6 @@ AppDrawer.defaultProps = {
 }
 
 export default compose(
-  withPageContext,
   withAuth,
   withStyles(styles)
 )(AppDrawer)

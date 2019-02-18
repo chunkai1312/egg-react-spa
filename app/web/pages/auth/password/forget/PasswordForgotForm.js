@@ -1,8 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import axios from 'axios'
-import compose from 'recompose/compose'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Formik, Field, Form } from 'formik'
 import { TextField } from 'formik-material-ui'
 import { withStyles } from '@material-ui/core/styles'
@@ -31,7 +30,8 @@ const styles = theme => ({
 })
 
 function PasswordForgotForm (props) {
-  const { t, classes, onSubmitSuccess, onSubmitFailure } = props
+  const { classes, onSubmitSuccess, onSubmitFailure } = props
+  const { t } = useTranslation()
 
   return (
     <Formik
@@ -70,13 +70,9 @@ function PasswordForgotForm (props) {
 }
 
 PasswordForgotForm.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   onSubmitSuccess: PropTypes.func,
   onSubmitFailure: PropTypes.func
 }
 
-export default compose(
-  withTranslation(),
-  withStyles(styles)
-)(PasswordForgotForm)
+export default withStyles(styles)(PasswordForgotForm)

@@ -31,6 +31,7 @@ function findActivePage (currentPages, match) {
 
 export function PageContextProvider (props) {
   const { children, pages, match } = props // eslint-disable-line
+
   return (
     <Translation ns={'page'}>
       {t => {
@@ -56,3 +57,5 @@ export function withPageContext (WrappedComponent) {
   )
   return ComponentWithPageContext
 }
+
+export default PageContext

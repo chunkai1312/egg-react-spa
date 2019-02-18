@@ -7,6 +7,7 @@ import theme from '../../styles/theme'
 
 function AppWrapper (props) {
   const { children } = props
+
   return (
     <MuiThemeProvider theme={theme}>
       <SnackbarProvider maxSnack={3}>

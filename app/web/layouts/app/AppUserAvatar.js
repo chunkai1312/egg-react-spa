@@ -1,8 +1,8 @@
-import React from 'react'
+import React, { useState } from 'react'
 import PropTypes from 'prop-types'
 import compose from 'recompose/compose'
 import { Link } from 'react-router-dom'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { withStyles } from '@material-ui/core/styles'
 import Avatar from '@material-ui/core/Avatar'
 import IconButton from '@material-ui/core/IconButton'
@@ -19,91 +19,77 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp'
 import withAuth from '../../components/withAuth'
 
 const styles = theme => ({
-  button: {
-    // padding: 0
-  },
+  button: {},
   avatar: {
     width: 24,
     height: 24
   }
 })
 
-class AuthUserAvatar extends React.Component {
-  state = {
-    open: false
+function AuthUserAvatar (props) {
+  const { classes, auth: { user, logout } } = props
+  const { t } = useTranslation()
+  const [ open, setOpen ] = useState(false)
+  const [ anchorEl, setAnchorEl ] = React.useState(null)
+
+  const handleToggle = () => setOpen(!open)
+  const handleClose = (event) => {
+    if (anchorEl.contains(event.target)) return
+    setOpen(false)
   }
 
-  handleToggle = () => {
-    this.setState(state => ({ open: !state.open }))
-  }
-
-  handleClose = event => {
-    if (this.anchorEl.contains(event.target)) {
-      return
-    }
-    this.setState({ open: false })
-  }
-
-  render () {
-    const { t, classes, auth: { user, logout } } = this.props
-    const { open } = this.state
-    return (
-      <React.Fragment>
-        <IconButton
-          className={classes.button}
-          buttonRef={node => {
-            this.anchorEl = node
-          }}
-          aria-owns={open ? 'menu-list-grow' : undefined}
-          aria-haspopup="true"
-          onClick={this.handleToggle}
-        >
-          {user && user.photo_url
-            ? <Avatar className={classes.avatar} alt="Avatar" src={user.photo_url} />
-            : <Avatar className={classes.avatar}>{user.name.substr(0, 1)}</Avatar>
-          }
-        </IconButton>
-        <Popper open={open} anchorEl={this.anchorEl} transition disablePortal>
-          {({ TransitionProps, placement }) => (
-            <Grow
-              {...TransitionProps}
-              id="menu-list-grow"
-              style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
-            >
-              <Paper>
-                <ClickAwayListener onClickAway={this.handleClose}>
-                  <MenuList>
-                    <MenuItem component={Link} to="/settings" onClick={this.handleClose}>
-                      <ListItemIcon>
-                        <SettingsIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={t('settings')} />
-                    </MenuItem>
-                    <MenuItem onClick={() => logout()}>
-                      <ListItemIcon>
-                        <ExitToAppIcon />
-                      </ListItemIcon>
-                      <ListItemText primary={t('logout')} />
-                    </MenuItem>
-                  </MenuList>
-                </ClickAwayListener>
-              </Paper>
-            </Grow>
-          )}
-        </Popper>
-      </React.Fragment>
-    )
-  }
+  return (
+    <React.Fragment>
+      <IconButton
+        className={classes.button}
+        buttonRef={node => setAnchorEl(node)}
+        aria-owns={open ? 'menu-list-grow' : undefined}
+        aria-haspopup="true"
+        onClick={handleToggle}
+      >
+        {user && user.photo_url
+          ? <Avatar className={classes.avatar} alt="Avatar" src={user.photo_url} />
+          : <Avatar className={classes.avatar}>{user.name.substr(0, 1)}</Avatar>
+        }
+      </IconButton>
+      <Popper open={open} anchorEl={anchorEl} transition disablePortal>
+        {({ TransitionProps, placement }) => (
+          <Grow
+            {...TransitionProps}
+            id="menu-list-grow"
+            style={{ transformOrigin: placement === 'bottom' ? 'center top' : 'center bottom' }}
+          >
+            <Paper>
+              <ClickAwayListener onClickAway={handleClose}>
+                <MenuList>
+                  <MenuItem component={Link} to="/settings" onClick={handleClose}>
+                    <ListItemIcon>
+                      <SettingsIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t('settings')} />
+                  </MenuItem>
+                  <MenuItem onClick={() => logout()}>
+                    <ListItemIcon>
+                      <ExitToAppIcon />
+                    </ListItemIcon>
+                    <ListItemText primary={t('logout')} />
+                  </MenuItem>
+                </MenuList>
+              </ClickAwayListener>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </React.Fragment>
+  )
 }
 
 AuthUserAvatar.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   auth: PropTypes.object
 }
 
 export default compose(
-  withTranslation(),
   withAuth,
   withStyles(styles)
 )(AuthUserAvatar)

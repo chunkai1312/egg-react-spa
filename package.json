@@ -62,7 +62,7 @@
     "react-i18next": "^10.1.2",
     "react-icons": "^3.2.2",
     "react-loading": "^2.0.3",
-    "react-redux": "^5.1.1",
+    "react-redux": "^6.0.1",
     "react-router-dom": "^4.3.1",
     "recompose": "^0.30.0",
     "redux": "^4.0.1",
@@ -76,7 +76,8 @@
     "node": ">=8.0.0"
   },
   "scripts": {
-    "start": "egg-scripts start --daemon",
+    "start": "egg-scripts start",
+    "startd": "egg-scripts start --daemon",
     "stop": "egg-scripts stop",
     "dev": "egg-bin dev",
     "build": "SET_PUBLIC_PATH=true roadhog build",

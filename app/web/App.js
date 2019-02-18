@@ -1,9 +1,7 @@
-import React from 'react'
+import React, { useState, useEffect } from 'react'
 import PropTypes from 'prop-types'
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
-import { connect } from 'react-redux'
 import { userIsAuthenticated, userIsNotAuthenticated } from './helpers/auth'
-import { initAuth } from './store/modules/auth'
 import home from './pages/home'
 import login from './pages/auth/login'
 import signup from './pages/auth/signup'
@@ -12,41 +10,35 @@ import reset from './pages/auth/password/reset'
 import settings from './pages/settings'
 import about from './pages/about'
 import Loading from './components/Loading'
+import withAuth from './components/withAuth'
 
-class App extends React.Component {
-  state = {
-    loading: true
-  }
+function App (props) {
+  const { auth } = props
+  const [loading, setLoading] = useState(true)
 
-  componentDidMount () {
-    if (this.state.loading) {
-      this.props.initAuth(() => this.setState({ loading: false }))
-    }
-  }
+  useEffect(() => {
+    auth.initAuth(() => setLoading(false))
+    return () => setLoading(true)
+  }, loading)
 
-  render () {
-    return this.state.loading ? <Loading /> : (
-      <Router>
-        <Switch>
-          <Route path="/" exact component={userIsAuthenticated(home)} />
-          <Route path="/about" exact component={userIsAuthenticated(about)} />
-          <Route path="/settings" exact component={userIsAuthenticated(settings)} />
-          <Route path="/login" exact component={userIsNotAuthenticated(login)} />
-          <Route path="/signup" exact component={userIsNotAuthenticated(signup)} />
-          <Route path="/password/forgot" exact component={userIsNotAuthenticated(forgot)} />
-          <Route path="/password/reset/:token" component={userIsNotAuthenticated(reset)} />
-          {/* NOTE: put other app routes here */}
-        </Switch>
-      </Router>
-    )
-  }
+  return loading ? <Loading /> : (
+    <Router>
+      <Switch>
+        <Route path="/" exact component={userIsAuthenticated(home)} />
+        <Route path="/about" exact component={userIsAuthenticated(about)} />
+        <Route path="/settings" exact component={userIsAuthenticated(settings)} />
+        <Route path="/login" exact component={userIsNotAuthenticated(login)} />
+        <Route path="/signup" exact component={userIsNotAuthenticated(signup)} />
+        <Route path="/password/forgot" exact component={userIsNotAuthenticated(forgot)} />
+        <Route path="/password/reset/:token" component={userIsNotAuthenticated(reset)} />
+        {/* NOTE: put other app routes here */}
+      </Switch>
+    </Router>
+  )
 }
 
 App.propTypes = {
-  initAuth: PropTypes.func.isRequired
+  auth: PropTypes.object.isRequired
 }
 
-export default connect(
-  state => ({ auth: state.auth }),
-  dispatch => ({ initAuth: (cb) => dispatch(initAuth(cb)) })
-)(App)
+export default withAuth(App)

@@ -2,7 +2,7 @@ import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
 import { connect } from 'react-redux'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { withSnackbar } from 'notistack'
@@ -54,9 +54,12 @@ const styles = theme => ({
   }
 })
 
-class SignupPage extends React.Component {
-  handleSubmit = (values, actions) => {
-    const { login, enqueueSnackbar } = this.props
+function SignupPage (props) {
+  const { classes } = props
+  const { t } = useTranslation()
+
+  const handleSubmit = (values, actions) => {
+    const { login, enqueueSnackbar } = props
     setTimeout(() => {
       axios.post('/api/signup', values)
         .then(res => {
@@ -70,29 +73,25 @@ class SignupPage extends React.Component {
     }, 500)
   }
 
-  render () {
-    const { t, classes } = this.props
-    return (
-      <div className={classes.root}>
-        <div className={classes.container}>
-          <Paper className={classes.paper} elevation={24}>
-            <Avatar className={classes.avatar}>
-              <PersonIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Sign up
-            </Typography>
-            <SignupForm onSubmit={this.handleSubmit} />
-            <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
-          </Paper>
-        </div>
+  return (
+    <div className={classes.root}>
+      <div className={classes.container}>
+        <Paper className={classes.paper} elevation={24}>
+          <Avatar className={classes.avatar}>
+            <PersonIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Sign up
+          </Typography>
+          <SignupForm onSubmit={handleSubmit} />
+          <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
+        </Paper>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 SignupPage.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   login: PropTypes.func.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
@@ -108,6 +107,5 @@ export default compose(
     dispatch => ({ login: token => dispatch(login(token)) })
   ),
   withSnackbar,
-  withTranslation(),
   withStyles(styles)
 )(SignupPage)

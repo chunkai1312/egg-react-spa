@@ -1,43 +1,28 @@
-import React from 'react'
+import { useEffect } from 'react'
 import PropTypes from 'prop-types'
 
-class LoginWithOauth extends React.Component {
-  constructor (props) {
-    super(props)
-    this.state = {
-      provider: props.provider,
-      url: props.url,
-      authenticate: () => window.open(props.url)
-    }
-  }
+function LoginWithOauth (props) {
+  const { render, provider, url, onCallback } = props
 
-  componentDidMount () {
-    window.addEventListener('message', this.onMessage)
-  }
-
-  componentWillUnmount () {
-    window.removeEventListener('message', this.onMessage)
-  }
-
-  onMessage = (e) => {
-    const { provider, onCallback } = this.props
-    if (e.origin !== window.origin || !e.data.token) {
-      return
-    }
+  const onMessage = (e) => {
+    if (e.origin !== window.origin || !e.data.token) return
     onCallback({ provider, ...e.data })
   }
 
-  render () {
-    return (
-      this.props.render(this.state)
-    )
-  }
+  useEffect(() => {
+    window.addEventListener('message', onMessage)
+    return () => {
+      window.removeEventListener('message', onMessage)
+    }
+  })
+
+  return render({ provider, url, authenticate: () => window.open(props.url) })
 }
 
 LoginWithOauth.propTypes = {
+  render: PropTypes.func.isRequired,
   provider: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  render: PropTypes.func.isRequired,
   onCallback: PropTypes.func.isRequired
 }
 

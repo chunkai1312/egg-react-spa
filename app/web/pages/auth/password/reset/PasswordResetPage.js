@@ -1,7 +1,7 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 import { compose } from 'recompose'
-import { withTranslation } from 'react-i18next'
+import { useTranslation } from 'react-i18next'
 import { Link } from 'react-router-dom'
 import { withSnackbar } from 'notistack'
 import withStyles from '@material-ui/core/styles/withStyles'
@@ -47,39 +47,37 @@ const styles = theme => ({
   }
 })
 
-class PasswordResetPage extends React.Component {
-  render () {
-    const { t, classes, enqueueSnackbar } = this.props
-    return (
-      <div className={classes.root}>
-        <div className={classes.container}>
-          <Paper className={classes.paper} elevation={24}>
-            <Avatar className={classes.avatar}>
-              <LockIcon />
-            </Avatar>
-            <Typography component="h1" variant="h5">
-              Reset Password
-            </Typography>
-            <PasswordResetForm
-              onSubmitSuccess={res => enqueueSnackbar(t('password_updated'), { variant: 'success' })}
-              onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
-            />
-            <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
-          </Paper>
-        </div>
+function PasswordResetPage (props) {
+  const { classes, enqueueSnackbar } = props
+  const { t } = useTranslation()
+
+  return (
+    <div className={classes.root}>
+      <div className={classes.container}>
+        <Paper className={classes.paper} elevation={24}>
+          <Avatar className={classes.avatar}>
+            <LockIcon />
+          </Avatar>
+          <Typography component="h1" variant="h5">
+            Reset Password
+          </Typography>
+          <PasswordResetForm
+            onSubmitSuccess={res => enqueueSnackbar(t('password_updated'), { variant: 'success' })}
+            onSubmitFailure={err => enqueueSnackbar(err.response.data.error, { variant: 'error' })}
+          />
+          <Button className={classes.button} fullWidth component={Link} to="/login">{t('return_to_login')}</Button>
+        </Paper>
       </div>
-    )
-  }
+    </div>
+  )
 }
 
 PasswordResetPage.propTypes = {
-  t: PropTypes.func.isRequired,
   classes: PropTypes.object.isRequired,
   enqueueSnackbar: PropTypes.func.isRequired
 }
 
 export default compose(
   withSnackbar,
-  withTranslation(),
   withStyles(styles)
 )(PasswordResetPage)

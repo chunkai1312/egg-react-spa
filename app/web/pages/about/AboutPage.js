@@ -6,7 +6,7 @@ const styles = theme => ({
   // TODO
 })
 
-function AboutPage () {
+function AboutPage (props) {
   return (
     <div>About Page</div>
   )

@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useContext, useState } from 'react'
 import PropTypes from 'prop-types'
 import DocumentTitle from 'react-document-title'
 import classNames from 'classnames'
@@ -8,7 +8,7 @@ import CssBaseline from '@material-ui/core/CssBaseline'
 import Hidden from '@material-ui/core/Hidden'
 import AppDrawer from './AppDrawer'
 import AppHeader from './AppHeader'
-import { withPageContext } from '../../components/PageContext'
+import PageContext from '../../components/PageContext'
 import withAuth from '../../components/withAuth'
 
 const drawerWidth = 256
@@ -35,61 +35,53 @@ const styles = theme => ({
   }
 })
 
-class AppFrame extends React.Component {
-  state = {
-    mobileOpen: false
-  }
+function AppFrame (props) {
+  const { children, classes, auth } = props
+  const [ mobileOpen, setMobileOpen ] = useState(false)
+  const { activePage } = useContext(PageContext)
+  const handleDrawerToggle = () => setMobileOpen(!mobileOpen)
 
-  handleDrawerToggle = () => {
-    this.setState(state => ({ mobileOpen: !state.mobileOpen }))
-  }
+  const title = activePage.title ? `${activePage.title} | ${process.env.APP_NAME}` : process.env.APP_NAME
+  const disablePermanent = !activePage.title && true
 
-  render () {
-    const { children, classes, auth, activePage } = this.props
-    const title = activePage.title ? `${activePage.title} | ${process.env.APP_NAME}` : process.env.APP_NAME
-    const disablePermanent = !activePage.title && true
-
-    return (
-      <div className={classes.root}>
-        <CssBaseline />
-        <DocumentTitle title={title} />
-        {auth.authenticated ? (
-          <React.Fragment>
-            <nav className={classNames({ [classes.drawer]: !disablePermanent })}>
-              <Hidden smUp={!disablePermanent} implementation="js">
-                <AppDrawer
-                  PaperProps={{ style: { width: drawerWidth } }}
-                  variant="temporary"
-                  open={this.state.mobileOpen}
-                  onClose={this.handleDrawerToggle}
-                />
+  return (
+    <div className={classes.root}>
+      <CssBaseline />
+      <DocumentTitle title={title} />
+      {auth.authenticated ? (
+        <React.Fragment>
+          <nav className={classNames({ [classes.drawer]: !disablePermanent })}>
+            <Hidden smUp={!disablePermanent} implementation="js">
+              <AppDrawer
+                PaperProps={{ style: { width: drawerWidth } }}
+                variant="temporary"
+                open={mobileOpen}
+                onClose={handleDrawerToggle}
+              />
+            </Hidden>
+            {disablePermanent ? null : (
+              <Hidden xsDown implementation="css">
+                <AppDrawer PaperProps={{ style: { width: drawerWidth } }} />
               </Hidden>
-              {disablePermanent ? null : (
-                <Hidden xsDown implementation="css">
-                  <AppDrawer PaperProps={{ style: { width: drawerWidth } }} />
-                </Hidden>
-              )}
-            </nav>
-            <div className={classes.appContent}>
-              <AppHeader onDrawerToggle={this.handleDrawerToggle} />
-              <main className={classNames({ [classes.mainContent]: !disablePermanent })}>{children}</main>
-            </div>
-          </React.Fragment>
-        ) : <main className={classes.appContent}>{children}</main>}
-      </div>
-    )
-  }
+            )}
+          </nav>
+          <div className={classes.appContent}>
+            <AppHeader onDrawerToggle={handleDrawerToggle} />
+            <main className={classNames({ [classes.mainContent]: !disablePermanent })}>{children}</main>
+          </div>
+        </React.Fragment>
+      ) : <main className={classes.appContent}>{children}</main>}
+    </div>
+  )
 }
 
 AppFrame.propTypes = {
   children: PropTypes.node.isRequired,
   classes: PropTypes.object.isRequired,
-  auth: PropTypes.object.isRequired,
-  activePage: PropTypes.object.isRequired
+  auth: PropTypes.object.isRequired
 }
 
 export default compose(
-  withPageContext,
   withAuth,
   withStyles(styles)
 )(AppFrame)
